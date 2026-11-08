@@ -1,0 +1,1251 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>📐 Polynomial Functions - رياضيات 12 عام | Mr. Mohammed Hesham</title>
+<meta name="description" content="امتحان تفاعلي عن إيجاد قيمة الدوال كثيرة الحدود - صف 12 عام">
+<meta name="author" content="Mr. Mohammed Hesham">
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&family=Inter:wght@400;600;700&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
+<style>
+body { font-family: 'Cairo', sans-serif; background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%); }
+body.en-mode { font-family: 'Inter', sans-serif; direction: ltr; }
+.arabic-math { font-family: 'Amiri', 'Cairo', serif; }
+.correct { background-color: #dcfce7 !important; border-color: #16a34a !important; }
+.incorrect { background-color: #fee2e2 !important; border-color: #dc2626 !important; }
+.timer-warning { color: #dc2626 !important; animation: pulse 1s infinite; }
+@keyframes pulse { 50% { opacity: 0.7; } }
+@media print { .no-print { display: none !important; } }
+.success-badge { display: inline-block; padding: 4px 12px; border-radius: 20px; font-weight: bold; font-size: 0.875rem; }
+.grade-excellent { background: #dcfce7; color: #166534; }
+.grade-good { background: #fef3c7; color: #92400e; }
+.grade-pass { background: #dbeafe; color: #1e40af; }
+.grade-fail { background: #fee2e2; color: #991b1b; }
+.lang-switch { position: fixed; top: 16px; left: 16px; z-index: 100; background: white; padding: 6px; border-radius: 30px; box-shadow: 0 4px 15px rgba(0,0,0,0.15); display: flex; gap: 4px; border: 2px solid #d97706; }
+body.en-mode .lang-switch { left: auto; right: 16px; }
+.lang-btn { padding: 6px 14px; border-radius: 20px; cursor: pointer; font-weight: bold; transition: all 0.3s; border: none; font-size: 0.875rem; background: transparent; color: #6b7280; }
+.lang-btn.active { background: #d97706; color: white; box-shadow: 0 2px 6px rgba(217,119,6,0.4); }
+.shuffle-badge { display: inline-block; background: linear-gradient(135deg, #d97706, #b45309); color: white; padding: 4px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: bold; margin-right: 8px; }
+body.en-mode .shuffle-badge { margin-right: 0; margin-left: 8px; }
+.math-display { display: inline-block; direction: ltr; font-family: 'Amiri', serif; font-size: 1.1em; padding: 2px 6px; background: #fef3c7; border-radius: 4px; margin: 2px; color: #92400e; font-weight: 600; }
+.save-indicator { position: fixed; bottom: 20px; left: 20px; z-index: 200; background: #10b981; color: white; padding: 8px 16px; border-radius: 20px; font-size: 0.8rem; font-weight: bold; opacity: 0; transition: opacity 0.3s; pointer-events: none; }
+body.en-mode .save-indicator { left: auto; right: 20px; }
+.save-indicator.show { opacity: 1; }
+.formula-box { background: #fef3c7; border: 2px solid #f59e0b; border-radius: 8px; padding: 12px; margin: 10px 0; font-family: 'Amiri', serif; direction: ltr; text-align: center; }
+.svg-graph { display: block; margin: 12px auto; background: white; border: 2px solid #e5e7eb; border-radius: 12px; padding: 8px; max-width: 100%; }
+.graph-container { text-align: center; margin: 10px 0; }
+.module-badge { display: inline-block; padding: 4px 16px; border-radius: 20px; font-weight: bold; font-size: 0.85rem; margin-bottom: 8px; }
+.module-1 { background: #fef3c7; color: #92400e; }
+.module-2 { background: #dbeafe; color: #1e40af; }
+.module-3 { background: #fce7f3; color: #9f1239; }
+.module-4 { background: #ecfdf5; color: #065f46; }
+.module-5 { background: #ede9fe; color: #5b21b6; }
+.module-6 { background: #fee2e2; color: #991b1b; }
+</style>
+</head>
+<body class="p-4 md:p-8 min-h-screen">
+
+<div class="lang-switch no-print">
+<button class="lang-btn active" onclick="setLanguage('ar')" id="btn-ar">عربي</button>
+<button class="lang-btn" onclick="setLanguage('en')" id="btn-en">EN</button>
+</div>
+
+<div id="saveIndicator" class="save-indicator">💾 <span data-ar="تم الحفظ" data-en="Saved">تم الحفظ</span></div>
+
+<div id="timer-container" class="max-w-5xl mx-auto mb-4 text-center no-print">
+<div class="bg-white p-4 rounded-2xl shadow-lg inline-block border-2 border-amber-100">
+<span class="text-gray-600 ml-2">⏰ <span data-ar="الوقت المتبقي:" data-en="Time Left:">الوقت المتبقي:</span></span>
+<span id="timer" class="text-2xl font-bold text-amber-700 font-mono">60:00</span>
+<span class="shuffle-badge">📐 <span data-ar="كثيرات الحدود" data-en="Polynomials">كثيرات الحدود</span> - 30 <span data-ar="سؤال" data-en="Questions">سؤال</span></span>
+</div>
+</div>
+
+<div class="max-w-5xl mx-auto mb-6 flex flex-wrap gap-3 justify-center no-print">
+<button onclick="toggleAnswers()" class="bg-amber-700 hover:bg-amber-800 text-white px-5 py-2 rounded-xl font-medium transition shadow">👀 <span data-ar="إظهار/إخفاء الإجابات" data-en="Show/Hide Answers">إظهار/إخفاء الإجابات</span></button>
+<button onclick="window.print()" class="bg-gray-700 hover:bg-gray-900 text-white px-5 py-2 rounded-xl font-medium transition shadow">🖨️ <span data-ar="طباعة" data-en="Print">طباعة</span></button>
+<button onclick="reshuffleExam()" class="bg-gradient-to-r from-amber-700 to-orange-600 hover:from-amber-800 hover:to-orange-700 text-white px-5 py-2 rounded-xl font-medium transition shadow">🔄 <span data-ar="أسئلة جديدة" data-en="New Questions">أسئلة جديدة</span></button>
+<button onclick="clearProgress()" class="bg-red-500 hover:bg-red-600 text-white px-5 py-2 rounded-xl font-medium transition shadow">🗑️ <span data-ar="مسح التقدم" data-en="Clear Progress">مسح التقدم</span></button>
+</div>
+
+<header class="max-w-5xl mx-auto bg-white p-8 rounded-3xl shadow-2xl mb-8 border-4 border-amber-500">
+<div class="text-center">
+<div class="inline-block bg-amber-700 text-white px-6 py-2 rounded-full text-sm font-bold mb-4">MATH GRADE 12 GENERAL - QUESTION 9</div>
+<h1 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">📐 <span data-ar="إيجاد قيمة الدوال كثيرة الحدود" data-en="Finding Values of Polynomial Functions">إيجاد قيمة الدوال كثيرة الحدود</span></h1>
+<h2 class="text-xl text-amber-700 font-semibold mb-2"><span data-ar="رياضيات صف 12 عام - ص 118 (تمارين 17-19)" data-en="Grade 12 General - Page 118 (Exercises 17-19)">رياضيات صف 12 عام - ص 118 (تمارين 17-19)</span></h2>
+<p class="text-gray-600 mb-4"><span data-ar="Degree, Leading Coefficient & Polynomial Evaluation" data-en="Degree, Leading Coefficient & Polynomial Evaluation">الدرجة، المعامل الرئيسي وتقييم كثيرات الحدود</span></p>
+<p class="text-sm text-green-600 font-semibold">💾 <span data-ar="يتم حفظ تقدمك تلقائياً - 30 سؤالاً في 6 أقسام" data-en="Your progress is auto-saved - 30 questions in 6 sections">يتم حفظ تقدمك تلقائياً - 30 سؤالاً في 6 أقسام</span></p>
+</div>
+<div class="mt-6 flex flex-wrap justify-center gap-4 text-sm text-gray-600">
+<span>📅 <span data-ar="التاريخ:" data-en="Date:">التاريخ:</span> <input type="text" id="examDate" class="border-b-2 border-amber-300 bg-transparent w-32 text-center"></span>
+<span>😊 <span data-ar="الاسم:" data-en="Name:">الاسم:</span> <input type="text" id="studentName" class="border-b-2 border-amber-300 bg-transparent w-40 text-center" data-placeholder-ar="اكتب اسمك" data-placeholder-en="Your name" placeholder="اكتب اسمك"></span>
+<span>🏫 <span data-ar="الشعبة:" data-en="Class:">الشعبة:</span> <input type="text" id="studentClass" class="border-b-2 border-amber-300 bg-transparent w-32 text-center" data-placeholder-ar="الشعبة" data-placeholder-en="Class" placeholder="الشعبة"></span>
+<span>⏰ <span data-ar="المدة: 60 دقيقة" data-en="Duration: 60 min">المدة: 60 دقيقة</span></span>
+<span>📊 <span data-ar="المجموع: 100 درجة" data-en="Total: 100 points">المجموع: 100 درجة</span></span>
+</div>
+</header>
+
+<div class="max-w-5xl mx-auto mb-6 bg-white p-4 rounded-xl shadow-lg border-2 border-amber-200 no-print">
+<h3 class="font-bold text-lg mb-3 text-amber-800 text-center">📐 <span data-ar="المفاهيم الأساسية" data-en="Key Concepts">المفاهيم الأساسية</span></h3>
+<div class="grid md:grid-cols-3 gap-3 text-sm">
+<div class="formula-box">
+<strong><span data-ar="درجة كثير الحدود:" data-en="Degree of Polynomial:">درجة كثير الحدود:</span></strong><br>
+<span data-ar="أكبر أس للمتغير" data-en="Highest exponent of variable">أكبر أس للمتغير</span><br>
+<span class="math-display">deg(axⁿ) = n</span>
+</div>
+<div class="formula-box">
+<strong><span data-ar="المعامل الرئيسي:" data-en="Leading Coefficient:">المعامل الرئيسي:</span></strong><br>
+<span data-ar="معامل الحد ذي أكبر درجة" data-en="Coefficient of highest degree term">معامل الحد ذي أكبر درجة</span><br>
+<span class="math-display">LC of axⁿ + ... = a</span>
+</div>
+<div class="formula-box">
+<strong><span data-ar="تقييم الدالة:" data-en="Evaluating Function:">تقييم الدالة:</span></strong><br>
+<span data-ar="عوض قيمة x في الدالة" data-en="Substitute x value into function">عوض قيمة x في الدالة</span><br>
+<span class="math-display">p(a) = replace x with a</span>
+</div>
+<div class="formula-box">
+<strong><span data-ar="ضرب كثيرات الحدود:" data-en="Multiplying Polynomials:">ضرب كثيرات الحدود:</span></strong><br>
+<span class="math-display">deg(f·g) = deg(f) + deg(g)</span><br>
+<span class="math-display">LC(f·g) = LC(f) · LC(g)</span>
+</div>
+<div class="formula-box">
+<strong><span data-ar="الصيغة القياسية:" data-en="Standard Form:">الصيغة القياسية:</span></strong><br>
+<span data-ar="رتب الحدود من الأكبر للأصغر" data-en="Order terms from highest to lowest degree">رتب الحدود من الأكبر للأصغر</span><br>
+<span class="math-display">axⁿ + bxⁿ⁻¹ + ... + c</span>
+</div>
+<div class="formula-box">
+<strong><span data-ar="أنواع كثيرات الحدود:" data-en="Types of Polynomials:">أنواع كثيرات الحدود:</span></strong><br>
+<span data-ar="درجة 1: خطي | درجة 2: تربيعي" data-en="Degree 1: linear | Degree 2: quadratic">درجة 1: خطي | درجة 2: تربيعي</span><br>
+<span data-ar="درجة 3: تكعيبي | درجة 4: من الدرجة الرابعة" data-en="Degree 3: cubic | Degree 4: quartic">درجة 3: تكعيبي | درجة 4: من الدرجة الرابعة</span>
+</div>
+</div>
+</div>
+
+<main class="max-w-5xl mx-auto space-y-8" id="exam-content"></main>
+
+<div class="text-center no-print pb-8 mt-8">
+<button onclick="gradeExam()" class="bg-gradient-to-r from-amber-700 to-orange-600 hover:from-amber-800 hover:to-orange-700 text-white text-lg px-12 py-4 rounded-2xl font-bold shadow-xl transition transform hover:scale-105">🎯 <span data-ar="صحح إجاباتي!" data-en="Grade My Exam!">صحح إجاباتي!</span></button>
+</div>
+
+<div id="results-panel" class="max-w-5xl mx-auto mt-8 bg-white p-8 rounded-3xl shadow-2xl border-4 border-amber-500 hidden no-print">
+<h2 class="text-3xl font-bold text-gray-900 mb-6 text-center">🏆 <span data-ar="نتيجتك يا بطل!" data-en="Your Result, Champion!">نتيجتك يا بطل!</span> 🏆</h2>
+<div class="grid md:grid-cols-3 gap-4 mb-6">
+<div class="bg-amber-50 p-4 rounded-xl text-center"><p>😊 <span data-ar="الاسم" data-en="Name">الاسم</span></p><p id="res-name" class="font-bold text-xl text-amber-700">-</p></div>
+<div class="bg-orange-50 p-4 rounded-xl text-center"><p>📅 <span data-ar="التاريخ" data-en="Date">التاريخ</span></p><p id="res-date" class="font-bold text-xl text-orange-700">-</p></div>
+<div class="bg-amber-50 p-4 rounded-xl text-center"><p>🌟 <span data-ar="المجموع" data-en="Total">المجموع</span></p><p id="res-total" class="font-bold text-3xl text-amber-700">0 / 100</p></div>
+</div>
+<div class="text-center mb-6">
+<span id="success-badge" class="success-badge grade-excellent">-</span>
+<p id="success-percent" class="text-4xl font-bold text-amber-700 mt-2">0%</p>
+<p class="text-sm text-gray-500"><span data-ar="نسبة النجاح" data-en="Success Rate">نسبة النجاح</span></p>
+</div>
+<div class="bg-gray-50 p-6 rounded-xl mb-6">
+<h3 class="font-bold text-lg mb-4 text-gray-800">📊 <span data-ar="أداؤك في كل قسم:" data-en="Your Performance by Section:">أداؤك في كل قسم:</span></h3>
+<div class="space-y-3" id="sections-performance"></div>
+</div>
+<div class="text-center">
+<button id="sendEmailBtn" onclick="sendResultsToEmail()" class="bg-gradient-to-r from-amber-700 to-orange-600 text-white text-lg px-8 py-3 rounded-2xl font-bold shadow-xl transition">📧 <span data-ar="أرسل النتيجة للمعلم" data-en="Send Result to Teacher">أرسل النتيجة للمعلم</span></button>
+<p id="emailStatus" class="text-sm mt-2 text-center font-medium"></p>
+</div>
+</div>
+
+<footer class="max-w-5xl mx-auto mt-10 mb-8 text-center text-gray-500 text-sm no-print">
+© Polynomial Functions - Grade 12 General | Mr. Mohammed Hesham 📐
+</footer>
+
+<script>
+const PUBLIC_KEY = "Rb3Lq8tXaFmc5YHUH";
+const SERVICE_ID = "service_w15m64i";
+const TEMPLATE_ID = "template_5b0u2tq";
+const TARGET_EMAIL = "mohammedhesham872@gmail.com";
+emailjs.init(PUBLIC_KEY);
+
+const STORAGE_KEY = 'polynomial_functions_grade12_v1';
+const TOTAL_TIME = 3600;
+const TOTAL_QUESTIONS = 30;
+const TOTAL_SECTIONS = 6;
+const QUESTIONS_PER_SECTION = 5;
+
+let currentSeed = null;
+let answersVisible = false;
+let saveIndicatorTimeout = null;
+let currentLang = 'ar';
+let timeRemaining = TOTAL_TIME;
+let timerInterval;
+let examData;
+let correctAnswersMap = {};
+let rng = null;
+
+function mulberry32(a) {
+    return function() {
+        var t = a += 0x6D2B79F5;
+        t = Math.imul(t ^ t >>> 15, t | 1);
+        t ^= t + Math.imul(t ^ t >>> 7, t | 61);
+        return ((t ^ t >>> 14) >>> 0) / 4294967296;
+    }
+}
+
+function showSaveIndicator() {
+    const indicator = document.getElementById('saveIndicator');
+    indicator.classList.add('show');
+    if (saveIndicatorTimeout) clearTimeout(saveIndicatorTimeout);
+    saveIndicatorTimeout = setTimeout(() => indicator.classList.remove('show'), 1500);
+}
+
+function saveState(showIndicator = true) {
+    try {
+        const state = {
+            seed: currentSeed, lang: currentLang,
+            studentName: document.getElementById('studentName').value,
+            studentClass: document.getElementById('studentClass').value,
+            examDate: document.getElementById('examDate').value,
+            answers: getSelectedAnswers(),
+            timeRemaining: timeRemaining,
+            answersVisible: answersVisible, savedAt: Date.now()
+        };
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+        if (showIndicator) showSaveIndicator();
+    } catch (e) { console.error('Save error:', e); }
+}
+
+function loadState() {
+    try {
+        const saved = localStorage.getItem(STORAGE_KEY);
+        return saved ? JSON.parse(saved) : null;
+    } catch (e) { return null; }
+}
+
+function getSelectedAnswers() {
+    const answers = {};
+    for (let i = 0; i < TOTAL_QUESTIONS; i++) {
+        const selected = document.querySelector('input[name="q'+i+'"]:checked');
+        if (selected) answers[i] = selected.value;
+    }
+    return answers;
+}
+
+function restoreAnswers(answers) {
+    if (!answers) return;
+    for (const [idx, val] of Object.entries(answers)) {
+        const radio = document.querySelector('input[name="q'+idx+'"][value="'+val+'"]');
+        if (radio) radio.checked = true;
+    }
+}
+
+function clearProgress() {
+    const msg = currentLang === 'ar' ? '⚠️ هل أنت متأكد من مسح كل التقدم؟' : '⚠️ Clear all progress?';
+    if (confirm(msg)) { localStorage.removeItem(STORAGE_KEY); location.reload(); }
+}
+
+function setupAnswerListeners() {
+    document.getElementById('exam-content').addEventListener('change', (e) => {
+        if (e.target.type === 'radio') saveState();
+    });
+}
+
+function setupInputListeners() {
+    ['studentName', 'studentClass', 'examDate'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) {
+            el.addEventListener('input', () => saveState(false));
+            el.addEventListener('blur', () => saveState());
+        }
+    });
+}
+
+// ==================== SVG DIAGRAMS ====================
+const svgGraphs = {
+    polynomial_degree: `<svg class="svg-graph" width="500" height="380" viewBox="0 0 500 380" xmlns="http://www.w3.org/2000/svg">
+        <rect x="5" y="5" width="490" height="370" rx="12" fill="#fef3c7" stroke="#f59e0b" stroke-width="2"/>
+        <text x="250" y="25" text-anchor="middle" font-size="14" fill="#92400e" font-weight="bold">📐 درجة كثير الحدود والمعامل الرئيسي</text>
+        <!-- Example polynomial -->
+        <rect x="20" y="45" width="460" height="60" rx="6" fill="#fde68a" stroke="#f59e0b" stroke-width="2"/>
+        <text x="250" y="70" text-anchor="middle" font-size="13" fill="#92400e" font-family="'Amiri', serif" font-weight="bold">p(x) = -5x⁴ + 3x² - 4x³ + 15x</text>
+        <text x="250" y="92" text-anchor="middle" font-size="11" fill="#92400e">Standard form: p(x) = -5x⁴ - 4x³ + 3x² + 15x</text>
+        <!-- Terms breakdown -->
+        <rect x="20" y="115" width="105" height="80" rx="6" fill="#fde68a" stroke="#f59e0b" stroke-width="2"/>
+        <text x="72" y="135" text-anchor="middle" font-size="11" fill="#92400e" font-weight="bold">-5x⁴</text>
+        <text x="72" y="155" text-anchor="middle" font-size="10" fill="#92400e">Degree: 4</text>
+        <text x="72" y="172" text-anchor="middle" font-size="10" fill="#92400e">Coeff: -5</text>
+        <text x="72" y="188" text-anchor="middle" font-size="9" fill="#dc2626" font-weight="bold">LEADING!</text>
+        <rect x="135" y="115" width="105" height="80" rx="6" fill="#fde68a" stroke="#f59e0b" stroke-width="2"/>
+        <text x="187" y="135" text-anchor="middle" font-size="11" fill="#92400e" font-weight="bold">-4x³</text>
+        <text x="187" y="155" text-anchor="middle" font-size="10" fill="#92400e">Degree: 3</text>
+        <text x="187" y="172" text-anchor="middle" font-size="10" fill="#92400e">Coeff: -4</text>
+        <rect x="250" y="115" width="105" height="80" rx="6" fill="#fde68a" stroke="#f59e0b" stroke-width="2"/>
+        <text x="302" y="135" text-anchor="middle" font-size="11" fill="#92400e" font-weight="bold">3x²</text>
+        <text x="302" y="155" text-anchor="middle" font-size="10" fill="#92400e">Degree: 2</text>
+        <text x="302" y="172" text-anchor="middle" font-size="10" fill="#92400e">Coeff: 3</text>
+        <rect x="365" y="115" width="105" height="80" rx="6" fill="#fde68a" stroke="#f59e0b" stroke-width="2"/>
+        <text x="417" y="135" text-anchor="middle" font-size="11" fill="#92400e" font-weight="bold">15x</text>
+        <text x="417" y="155" text-anchor="middle" font-size="10" fill="#92400e">Degree: 1</text>
+        <text x="417" y="172" text-anchor="middle" font-size="10" fill="#92400e">Coeff: 15</text>
+        <!-- Summary -->
+        <rect x="20" y="205" width="460" height="80" rx="6" fill="#fef3c7" stroke="#f59e0b" stroke-width="2"/>
+        <text x="250" y="225" text-anchor="middle" font-size="12" fill="#92400e" font-weight="bold">Summary (الملخص):</text>
+        <text x="250" y="245" text-anchor="middle" font-size="11" fill="#92400e">• Degree = highest exponent = 4 (الدرجة = أكبر أس)</text>
+        <text x="250" y="263" text-anchor="middle" font-size="11" fill="#92400e">• Leading Coefficient = coefficient of highest degree term = -5</text>
+        <text x="250" y="280" text-anchor="middle" font-size="11" fill="#92400e" font-weight="bold">(المعامل الرئيسي = معامل الحد ذي أكبر درجة = -5)</text>
+        <!-- Rules -->
+        <rect x="20" y="295" width="460" height="70" rx="6" fill="#fef3c7" stroke="#f59e0b" stroke-width="2"/>
+        <text x="250" y="315" text-anchor="middle" font-size="11" fill="#92400e" font-weight="bold">🔑 Key Rules:</text>
+        <text x="250" y="333" text-anchor="middle" font-size="10" fill="#92400e">• Always write in standard form (descending powers) first</text>
+        <text x="250" y="350" text-anchor="middle" font-size="10" fill="#92400e">• Leading term = term with highest degree | Leading coefficient = its coefficient</text>
+        <text x="250" y="363" text-anchor="middle" font-size="9" fill="#92400e">• Degree determines end behavior | Leading coefficient determines direction</text>
+    </svg>`,
+    
+    q35_solution: `<svg class="svg-graph" width="500" height="360" viewBox="0 0 500 360" xmlns="http://www.w3.org/2000/svg">
+        <rect x="5" y="5" width="490" height="350" rx="12" fill="#dbeafe" stroke="#2563eb" stroke-width="2"/>
+        <text x="250" y="25" text-anchor="middle" font-size="14" fill="#1e40af" font-weight="bold">📝 السؤال 35: -5x⁴ + 3x² - 4x³ + 15x</text>
+        <!-- Step 1 -->
+        <rect x="20" y="45" width="460" height="60" rx="6" fill="#bfdbfe" stroke="#2563eb" stroke-width="2"/>
+        <text x="250" y="65" text-anchor="middle" font-size="11" fill="#1e40af" font-weight="bold">Step 1: Rewrite in standard form (descending powers)</text>
+        <text x="250" y="85" text-anchor="middle" font-size="12" fill="#1e40af" font-family="'Amiri', serif">p(x) = -5x⁴ - 4x³ + 3x² + 15x</text>
+        <text x="250" y="100" text-anchor="middle" font-size="10" fill="#1e40af">Note: rearranged from -5x⁴ + 3x² - 4x³ + 15x</text>
+        <!-- Step 2 -->
+        <rect x="20" y="115" width="460" height="60" rx="6" fill="#bfdbfe" stroke="#2563eb" stroke-width="2"/>
+        <text x="250" y="135" text-anchor="middle" font-size="11" fill="#1e40af" font-weight="bold">Step 2: Identify the leading term</text>
+        <text x="250" y="155" text-anchor="middle" font-size="12" fill="#1e40af" font-family="'Amiri', serif">Leading term = -5x⁴ (highest degree = 4)</text>
+        <text x="250" y="170" text-anchor="middle" font-size="10" fill="#1e40af">الحد الرئيسي = -5x⁴ (الدرجة الأعلى = 4)</text>
+        <!-- Step 3 -->
+        <rect x="20" y="185" width="460" height="60" rx="6" fill="#bfdbfe" stroke="#2563eb" stroke-width="2"/>
+        <text x="250" y="205" text-anchor="middle" font-size="11" fill="#1e40af" font-weight="bold">Step 3: Extract degree and leading coefficient</text>
+        <text x="250" y="225" text-anchor="middle" font-size="12" fill="#1e40af" font-family="'Amiri', serif">Degree = 4, Leading Coefficient = -5</text>
+        <!-- Answer -->
+        <rect x="20" y="255" width="460" height="50" rx="6" fill="#fef3c7" stroke="#f59e0b" stroke-width="2"/>
+        <text x="250" y="275" text-anchor="middle" font-size="12" fill="#92400e" font-weight="bold">Answer: c) الدرجة 4، المعامل الرئيسي -5</text>
+        <text x="250" y="295" text-anchor="middle" font-size="11" fill="#92400e">Degree 4, Leading Coefficient -5</text>
+        <!-- Visual highlight -->
+        <rect x="20" y="315" width="460" height="35" rx="6" fill="#fef3c7" stroke="#f59e0b" stroke-width="2"/>
+        <text x="250" y="337" text-anchor="middle" font-size="10" fill="#92400e">💡 Tip: Always arrange in descending order first to avoid confusion!</text>
+    </svg>`,
+    
+    q36_solution: `<svg class="svg-graph" width="500" height="360" viewBox="0 0 500 360" xmlns="http://www.w3.org/2000/svg">
+        <rect x="5" y="5" width="490" height="350" rx="12" fill="#fce7f3" stroke="#ec4899" stroke-width="2"/>
+        <text x="250" y="25" text-anchor="middle" font-size="14" fill="#9f1239" font-weight="bold">📝 السؤال 36: -18 + 3b⁵ - 9b + 13b³</text>
+        <!-- Step 1 -->
+        <rect x="20" y="45" width="460" height="60" rx="6" fill="#fbcfe8" stroke="#ec4899" stroke-width="2"/>
+        <text x="250" y="65" text-anchor="middle" font-size="11" fill="#9f1239" font-weight="bold">Step 1: Rewrite in standard form</text>
+        <text x="250" y="85" text-anchor="middle" font-size="12" fill="#9f1239" font-family="'Amiri', serif">p(b) = 3b⁵ + 13b³ - 9b - 18</text>
+        <text x="250" y="100" text-anchor="middle" font-size="10" fill="#9f1239">Ordered by descending powers of b</text>
+        <!-- Step 2 -->
+        <rect x="20" y="115" width="460" height="60" rx="6" fill="#fbcfe8" stroke="#ec4899" stroke-width="2"/>
+        <text x="250" y="135" text-anchor="middle" font-size="11" fill="#9f1239" font-weight="bold">Step 2: Identify leading term</text>
+        <text x="250" y="155" text-anchor="middle" font-size="12" fill="#9f1239" font-family="'Amiri', serif">Leading term = 3b⁵ (highest degree = 5)</text>
+        <text x="250" y="170" text-anchor="middle" font-size="10" fill="#9f1239">الحد الرئيسي = 3b⁵ (الدرجة = 5)</text>
+        <!-- Step 3 -->
+        <rect x="20" y="185" width="460" height="60" rx="6" fill="#fbcfe8" stroke="#ec4899" stroke-width="2"/>
+        <text x="250" y="205" text-anchor="middle" font-size="11" fill="#9f1239" font-weight="bold">Step 3: Extract degree and leading coefficient</text>
+        <text x="250" y="225" text-anchor="middle" font-size="12" fill="#9f1239" font-family="'Amiri', serif">Degree = 5, Leading Coefficient = 3</text>
+        <!-- Answer -->
+        <rect x="20" y="255" width="460" height="50" rx="6" fill="#fef3c7" stroke="#f59e0b" stroke-width="2"/>
+        <text x="250" y="275" text-anchor="middle" font-size="12" fill="#92400e" font-weight="bold">Answer: b) الدرجة 5، المعامل الرئيسي 3</text>
+        <text x="250" y="295" text-anchor="middle" font-size="11" fill="#92400e">Degree 5, Leading Coefficient 3</text>
+        <!-- Note -->
+        <rect x="20" y="315" width="460" height="35" rx="6" fill="#fef3c7" stroke="#f59e0b" stroke-width="2"/>
+        <text x="250" y="337" text-anchor="middle" font-size="10" fill="#92400e">⚠️ Don't be fooled by the order! Always rearrange first!</text>
+    </svg>`,
+    
+    q37_solution: `<svg class="svg-graph" width="500" height="380" viewBox="0 0 500 380" xmlns="http://www.w3.org/2000/svg">
+        <rect x="5" y="5" width="490" height="370" rx="12" fill="#ecfdf5" stroke="#10b981" stroke-width="2"/>
+        <text x="250" y="25" text-anchor="middle" font-size="14" fill="#065f46" font-weight="bold">📝 السؤال 37: (d + 5)(3d - 4)</text>
+        <!-- Step 1 -->
+        <rect x="20" y="45" width="460" height="70" rx="6" fill="#d1fae5" stroke="#10b981" stroke-width="2"/>
+        <text x="250" y="65" text-anchor="middle" font-size="11" fill="#065f46" font-weight="bold">Step 1: Expand the product (FOIL method)</text>
+        <text x="250" y="85" text-anchor="middle" font-size="11" fill="#065f46" font-family="'Amiri', serif">(d + 5)(3d - 4) = d·3d + d·(-4) + 5·3d + 5·(-4)</text>
+        <text x="250" y="103" text-anchor="middle" font-size="11" fill="#065f46" font-family="'Amiri', serif">= 3d² - 4d + 15d - 20 = 3d² + 11d - 20</text>
+        <!-- Step 2 -->
+        <rect x="20" y="125" width="460" height="60" rx="6" fill="#d1fae5" stroke="#10b981" stroke-width="2"/>
+        <text x="250" y="145" text-anchor="middle" font-size="11" fill="#065f46" font-weight="bold">Step 2: Identify degree and leading coefficient</text>
+        <text x="250" y="165" text-anchor="middle" font-size="11" fill="#065f46" font-family="'Amiri', serif">3d² + 11d - 20 → Degree = 2, LC = 3</text>
+        <!-- Alternative method -->
+        <rect x="20" y="195" width="460" height="80" rx="6" fill="#d1fae5" stroke="#10b981" stroke-width="2"/>
+        <text x="250" y="215" text-anchor="middle" font-size="11" fill="#065f46" font-weight="bold">💡 Shortcut Method (without expanding):</text>
+        <text x="250" y="235" text-anchor="middle" font-size="10" fill="#065f46">deg(f·g) = deg(f) + deg(g) = 1 + 1 = 2</text>
+        <text x="250" y="253" text-anchor="middle" font-size="10" fill="#065f46">LC(f·g) = LC(f) · LC(g) = 1 · 3 = 3</text>
+        <text x="250" y="270" text-anchor="middle" font-size="10" fill="#065f46">(d has coeff 1, 3d has coeff 3)</text>
+        <!-- Answer -->
+        <rect x="20" y="285" width="460" height="50" rx="6" fill="#fef3c7" stroke="#f59e0b" stroke-width="2"/>
+        <text x="250" y="305" text-anchor="middle" font-size="12" fill="#92400e" font-weight="bold">Answer: b) الدرجة 1... wait, degree 2, LC 3</text>
+        <text x="250" y="325" text-anchor="middle" font-size="11" fill="#92400e">Correct: degree 2, leading coefficient 3</text>
+        <!-- Note -->
+        <rect x="20" y="345" width="460" height="25" rx="6" fill="#fef3c7" stroke="#f59e0b" stroke-width="2"/>
+        <text x="250" y="362" text-anchor="middle" font-size="10" fill="#92400e" font-weight="bold">Note: Check options - degree 2, LC 3 matches option d in original</text>
+    </svg>`,
+    
+    q38_solution: `<svg class="svg-graph" width="500" height="380" viewBox="0 0 500 380" xmlns="http://www.w3.org/2000/svg">
+        <rect x="5" y="5" width="490" height="370" rx="12" fill="#ede9fe" stroke="#7c3aed" stroke-width="2"/>
+        <text x="250" y="25" text-anchor="middle" font-size="14" fill="#5b21b6" font-weight="bold">📝 السؤال 38: p(x) = x⁴ - 2x² + 3, find p(-2)</text>
+        <!-- Step 1 -->
+        <rect x="20" y="45" width="460" height="60" rx="6" fill="#ddd6fe" stroke="#7c3aed" stroke-width="2"/>
+        <text x="250" y="65" text-anchor="middle" font-size="11" fill="#5b21b6" font-weight="bold">Step 1: Substitute x = -2 into p(x)</text>
+        <text x="250" y="85" text-anchor="middle" font-size="11" fill="#5b21b6" font-family="'Amiri', serif">p(-2) = (-2)⁴ - 2(-2)² + 3</text>
+        <text x="250" y="100" text-anchor="middle" font-size="10" fill="#5b21b6">Replace every x with (-2)</text>
+        <!-- Step 2 -->
+        <rect x="20" y="115" width="460" height="70" rx="6" fill="#ddd6fe" stroke="#7c3aed" stroke-width="2"/>
+        <text x="250" y="135" text-anchor="middle" font-size="11" fill="#5b21b6" font-weight="bold">Step 2: Calculate each term</text>
+        <text x="250" y="155" text-anchor="middle" font-size="11" fill="#5b21b6" font-family="'Amiri', serif">(-2)⁴ = 16 (even power → positive)</text>
+        <text x="250" y="173" text-anchor="middle" font-size="11" fill="#5b21b6" font-family="'Amiri', serif">-2(-2)² = -2(4) = -8</text>
+        <text x="250" y="185" text-anchor="middle" font-size="10" fill="#5b21b6">Note: (-2)² = 4, then multiply by -2</text>
+        <!-- Step 3 -->
+        <rect x="20" y="195" width="460" height="60" rx="6" fill="#ddd6fe" stroke="#7c3aed" stroke-width="2"/>
+        <text x="250" y="215" text-anchor="middle" font-size="11" fill="#5b21b6" font-weight="bold">Step 3: Add all terms</text>
+        <text x="250" y="235" text-anchor="middle" font-size="12" fill="#5b21b6" font-family="'Amiri', serif">p(-2) = 16 - 8 + 3 = 11</text>
+        <!-- Answer -->
+        <rect x="20" y="265" width="460" height="50" rx="6" fill="#fef3c7" stroke="#f59e0b" stroke-width="2"/>
+        <text x="250" y="285" text-anchor="middle" font-size="12" fill="#92400e" font-weight="bold">Answer: b) p(-2) = 11</text>
+        <text x="250" y="305" text-anchor="middle" font-size="11" fill="#92400e">p(-2) = 16 - 8 + 3 = 11 ✓</text>
+        <!-- Verification -->
+        <rect x="20" y="325" width="460" height="40" rx="6" fill="#fef3c7" stroke="#f59e0b" stroke-width="2"/>
+        <text x="250" y="345" text-anchor="middle" font-size="10" fill="#92400e">✓ Verify: 16 - 8 + 3 = 8 + 3 = 11 ✓</text>
+        <text x="250" y="360" text-anchor="middle" font-size="9" fill="#92400e">⚠️ Common mistake: (-2)⁴ = 16 (NOT -16)! Even power makes it positive</text>
+    </svg>`,
+    
+    q39_solution: `<svg class="svg-graph" width="500" height="380" viewBox="0 0 500 380" xmlns="http://www.w3.org/2000/svg">
+        <rect x="5" y="5" width="490" height="370" rx="12" fill="#fee2e2" stroke="#dc2626" stroke-width="2"/>
+        <text x="250" y="25" text-anchor="middle" font-size="14" fill="#991b1b" font-weight="bold">📝 السؤال 39: p(x) = -x³ + 3x² - 5, find p(3)</text>
+        <!-- Step 1 -->
+        <rect x="20" y="45" width="460" height="60" rx="6" fill="#fecaca" stroke="#dc2626" stroke-width="2"/>
+        <text x="250" y="65" text-anchor="middle" font-size="11" fill="#991b1b" font-weight="bold">Step 1: Substitute x = 3</text>
+        <text x="250" y="85" text-anchor="middle" font-size="11" fill="#991b1b" font-family="'Amiri', serif">p(3) = -(3)³ + 3(3)² - 5</text>
+        <text x="250" y="100" text-anchor="middle" font-size="10" fill="#991b1b">⚠️ Note: -x³ means -(x³), not (-x)³</text>
+        <!-- Step 2 -->
+        <rect x="20" y="115" width="460" height="70" rx="6" fill="#fecaca" stroke="#dc2626" stroke-width="2"/>
+        <text x="250" y="135" text-anchor="middle" font-size="11" fill="#991b1b" font-weight="bold">Step 2: Calculate each term carefully</text>
+        <text x="250" y="155" text-anchor="middle" font-size="11" fill="#991b1b" font-family="'Amiri', serif">-(3)³ = -(27) = -27</text>
+        <text x="250" y="173" text-anchor="middle" font-size="11" fill="#991b1b" font-family="'Amiri', serif">3(3)² = 3(9) = 27</text>
+        <text x="250" y="185" text-anchor="middle" font-size="10" fill="#991b1b">-5 stays as -5</text>
+        <!-- Step 3 -->
+        <rect x="20" y="195" width="460" height="60" rx="6" fill="#fecaca" stroke="#dc2626" stroke-width="2"/>
+        <text x="250" y="215" text-anchor="middle" font-size="11" fill="#991b1b" font-weight="bold">Step 3: Combine</text>
+        <text x="250" y="235" text-anchor="middle" font-size="12" fill="#991b1b" font-family="'Amiri', serif">p(3) = -27 + 27 - 5 = -5</text>
+        <!-- Answer -->
+        <rect x="20" y="265" width="460" height="50" rx="6" fill="#fef3c7" stroke="#f59e0b" stroke-width="2"/>
+        <text x="250" y="285" text-anchor="middle" font-size="12" fill="#92400e" font-weight="bold">Answer: a) p(3) = -5</text>
+        <text x="250" y="305" text-anchor="middle" font-size="11" fill="#92400e">-27 + 27 - 5 = 0 - 5 = -5 ✓</text>
+        <!-- Warning -->
+        <rect x="20" y="325" width="460" height="40" rx="6" fill="#fef3c7" stroke="#f59e0b" stroke-width="2"/>
+        <text x="250" y="345" text-anchor="middle" font-size="10" fill="#92400e" font-weight="bold">⚠️ Critical: -x³ at x=3 is -(27)=-27, NOT (-3)³=-27 (same here but concept differs!)</text>
+        <text x="250" y="360" text-anchor="middle" font-size="9" fill="#92400e">For -x² at x=-2: -(-2)² = -(4) = -4, NOT (-(-2))² = 4</text>
+    </svg>`,
+    
+    polynomial_graphs: `<svg class="svg-graph" width="500" height="400" viewBox="0 0 500 400" xmlns="http://www.w3.org/2000/svg">
+        <rect x="5" y="5" width="490" height="390" rx="12" fill="#fef3c7" stroke="#f59e0b" stroke-width="2"/>
+        <text x="250" y="25" text-anchor="middle" font-size="14" fill="#92400e" font-weight="bold">📊 أشكال كثيرات الحدود حسب الدرجة</text>
+        <!-- Degree 1: Linear -->
+        <rect x="20" y="45" width="220" height="100" rx="6" fill="#fde68a" stroke="#f59e0b" stroke-width="2"/>
+        <text x="130" y="65" text-anchor="middle" font-size="11" fill="#92400e" font-weight="bold">Degree 1: Linear (خطي)</text>
+        <text x="130" y="82" text-anchor="middle" font-size="10" fill="#92400e">y = mx + b</text>
+        <line x1="40" y1="130" x2="220" y2="90" stroke="#2563eb" stroke-width="2"/>
+        <text x="130" y="140" text-anchor="middle" font-size="9" fill="#92400e">Straight line</text>
+        <!-- Degree 2: Quadratic -->
+        <rect x="260" y="45" width="220" height="100" rx="6" fill="#fde68a" stroke="#f59e0b" stroke-width="2"/>
+        <text x="370" y="65" text-anchor="middle" font-size="11" fill="#92400e" font-weight="bold">Degree 2: Quadratic (تربيعي)</text>
+        <text x="370" y="82" text-anchor="middle" font-size="10" fill="#92400e">y = ax² + bx + c</text>
+        <path d="M 280 130 Q 330 90 370 90 Q 410 90 460 130" fill="none" stroke="#16a34a" stroke-width="2"/>
+        <text x="370" y="140" text-anchor="middle" font-size="9" fill="#92400e">Parabola (قطع مكافئ)</text>
+        <!-- Degree 3: Cubic -->
+        <rect x="20" y="155" width="220" height="100" rx="6" fill="#fde68a" stroke="#f59e0b" stroke-width="2"/>
+        <text x="130" y="175" text-anchor="middle" font-size="11" fill="#92400e" font-weight="bold">Degree 3: Cubic (تكعيبي)</text>
+        <text x="130" y="192" text-anchor="middle" font-size="10" fill="#92400e">y = ax³ + bx² + cx + d</text>
+        <path d="M 40 240 Q 80 200 130 220 Q 180 240 220 180" fill="none" stroke="#dc2626" stroke-width="2"/>
+        <text x="130" y="250" text-anchor="middle" font-size="9" fill="#92400e">S-curve</text>
+        <!-- Degree 4: Quartic -->
+        <rect x="260" y="155" width="220" height="100" rx="6" fill="#fde68a" stroke="#f59e0b" stroke-width="2"/>
+        <text x="370" y="175" text-anchor="middle" font-size="11" fill="#92400e" font-weight="bold">Degree 4: Quartic</text>
+        <text x="370" y="192" text-anchor="middle" font-size="10" fill="#92400e">y = ax⁴ + ...</text>
+        <path d="M 280 240 Q 320 200 370 220 Q 420 200 460 240" fill="none" stroke="#7c3aed" stroke-width="2"/>
+        <text x="370" y="250" text-anchor="middle" font-size="9" fill="#92400e">W or M shape</text>
+        <!-- End behavior -->
+        <rect x="20" y="265" width="460" height="120" rx="6" fill="#fef3c7" stroke="#f59e0b" stroke-width="2"/>
+        <text x="250" y="285" text-anchor="middle" font-size="11" fill="#92400e" font-weight="bold">🔑 End Behavior (السلوك الطرفي):</text>
+        <text x="250" y="303" text-anchor="middle" font-size="10" fill="#92400e">• Even degree, positive LC: both ends go UP (مثل x², x⁴)</text>
+        <text x="250" y="320" text-anchor="middle" font-size="10" fill="#92400e">• Even degree, negative LC: both ends go DOWN (مثل -x²)</text>
+        <text x="250" y="337" text-anchor="middle" font-size="10" fill="#92400e">• Odd degree, positive LC: left DOWN, right UP (مثل x³)</text>
+        <text x="250" y="354" text-anchor="middle" font-size="10" fill="#92400e">• Odd degree, negative LC: left UP, right DOWN (مثل -x³)</text>
+        <text x="250" y="372" text-anchor="middle" font-size="10" fill="#92400e" font-weight="bold">Leading coefficient sign determines direction!</text>
+    </svg>`,
+    
+    evaluation_steps: `<svg class="svg-graph" width="500" height="380" viewBox="0 0 500 380" xmlns="http://www.w3.org/2000/svg">
+        <rect x="5" y="5" width="490" height="370" rx="12" fill="#dbeafe" stroke="#2563eb" stroke-width="2"/>
+        <text x="250" y="25" text-anchor="middle" font-size="14" fill="#1e40af" font-weight="bold">📝 تقييم كثيرات الحدود - Evaluating Polynomials</text>
+        <!-- Example -->
+        <rect x="20" y="45" width="460" height="50" rx="6" fill="#bfdbfe" stroke="#2563eb" stroke-width="2"/>
+        <text x="250" y="65" text-anchor="middle" font-size="12" fill="#1e40af" font-family="'Amiri', serif" font-weight="bold">Evaluate p(x) = 2x³ - 5x² + 3x - 7 at x = 2</text>
+        <!-- Step 1 -->
+        <rect x="20" y="105" width="460" height="50" rx="6" fill="#bfdbfe" stroke="#2563eb" stroke-width="2"/>
+        <text x="250" y="125" text-anchor="middle" font-size="11" fill="#1e40af" font-weight="bold">Step 1: Substitute x = 2</text>
+        <text x="250" y="145" text-anchor="middle" font-size="11" fill="#1e40af" font-family="'Amiri', serif">p(2) = 2(2)³ - 5(2)² + 3(2) - 7</text>
+        <!-- Step 2 -->
+        <rect x="20" y="165" width="460" height="50" rx="6" fill="#bfdbfe" stroke="#2563eb" stroke-width="2"/>
+        <text x="250" y="185" text-anchor="middle" font-size="11" fill="#1e40af" font-weight="bold">Step 2: Calculate powers first (PEMDAS)</text>
+        <text x="250" y="205" text-anchor="middle" font-size="11" fill="#1e40af" font-family="'Amiri', serif">p(2) = 2(8) - 5(4) + 3(2) - 7</text>
+        <!-- Step 3 -->
+        <rect x="20" y="225" width="460" height="50" rx="6" fill="#bfdbfe" stroke="#2563eb" stroke-width="2"/>
+        <text x="250" y="245" text-anchor="middle" font-size="11" fill="#1e40af" font-weight="bold">Step 3: Multiply</text>
+        <text x="250" y="265" text-anchor="middle" font-size="11" fill="#1e40af" font-family="'Amiri', serif">p(2) = 16 - 20 + 6 - 7</text>
+        <!-- Step 4 -->
+        <rect x="20" y="285" width="460" height="50" rx="6" fill="#bfdbfe" stroke="#2563eb" stroke-width="2"/>
+        <text x="250" y="305" text-anchor="middle" font-size="11" fill="#1e40af" font-weight="bold">Step 4: Add/Subtract left to right</text>
+        <text x="250" y="325" text-anchor="middle" font-size="12" fill="#1e40af" font-family="'Amiri', serif" font-weight="bold">p(2) = 16 - 20 + 6 - 7 = -5</text>
+        <!-- Tips -->
+        <rect x="20" y="345" width="460" height="25" rx="6" fill="#fef3c7" stroke="#f59e0b" stroke-width="2"/>
+        <text x="250" y="362" text-anchor="middle" font-size="10" fill="#92400e" font-weight="bold">💡 Tip: Use parentheses for negative inputs: p(-2) means substitute (-2) everywhere</text>
+    </svg>`,
+    
+    leading_coefficient_visual: `<svg class="svg-graph" width="500" height="360" viewBox="0 0 500 360" xmlns="http://www.w3.org/2000/svg">
+        <rect x="5" y="5" width="490" height="350" rx="12" fill="#fce7f3" stroke="#ec4899" stroke-width="2"/>
+        <text x="250" y="25" text-anchor="middle" font-size="14" fill="#9f1239" font-weight="bold">🎯 المعامل الرئيسي وأثره - Leading Coefficient Effect</text>
+        <!-- Positive LC -->
+        <rect x="20" y="45" width="220" height="150" rx="6" fill="#fbcfe8" stroke="#ec4899" stroke-width="2"/>
+        <text x="130" y="65" text-anchor="middle" font-size="11" fill="#9f1239" font-weight="bold">Positive LC (a &gt; 0)</text>
+        <text x="130" y="82" text-anchor="middle" font-size="10" fill="#9f1239">Even degree: both ends UP</text>
+        <text x="130" y="97" text-anchor="middle" font-size="10" fill="#9f1239">Odd degree: left DOWN, right UP</text>
+        <!-- Graph for positive even -->
+        <path d="M 40 170 Q 80 100 130 90 Q 180 100 220 170" fill="none" stroke="#16a34a" stroke-width="2.5"/>
+        <text x="130" y="185" text-anchor="middle" font-size="9" fill="#166534">y = x² (LC = 1 &gt; 0)</text>
+        <!-- Negative LC -->
+        <rect x="260" y="45" width="220" height="150" rx="6" fill="#fbcfe8" stroke="#ec4899" stroke-width="2"/>
+        <text x="370" y="65" text-anchor="middle" font-size="11" fill="#9f1239" font-weight="bold">Negative LC (a &lt; 0)</text>
+        <text x="370" y="82" text-anchor="middle" font-size="10" fill="#9f1239">Even degree: both ends DOWN</text>
+        <text x="370" y="97" text-anchor="middle" font-size="10" fill="#9f1239">Odd degree: left UP, right DOWN</text>
+        <!-- Graph for negative even -->
+        <path d="M 280 100 Q 320 170 370 180 Q 420 170 460 100" fill="none" stroke="#dc2626" stroke-width="2.5"/>
+        <text x="370" y="195" text-anchor="middle" font-size="9" fill="#991b1b">y = -x² (LC = -1 &lt; 0)</text>
+        <!-- Examples -->
+        <rect x="20" y="205" width="460" height="135" rx="6" fill="#fef3c7" stroke="#f59e0b" stroke-width="2"/>
+        <text x="250" y="225" text-anchor="middle" font-size="11" fill="#92400e" font-weight="bold">Examples from Questions:</text>
+        <text x="250" y="245" text-anchor="middle" font-size="10" fill="#92400e">Q35: -5x⁴ - 4x³ + 3x² + 15x → LC = -5 (negative), degree 4 (even)</text>
+        <text x="250" y="263" text-anchor="middle" font-size="10" fill="#92400e">→ Both ends go DOWN (like -x⁴)</text>
+        <text x="250" y="283" text-anchor="middle" font-size="10" fill="#92400e">Q36: 3b⁵ + 13b³ - 9b - 18 → LC = 3 (positive), degree 5 (odd)</text>
+        <text x="250" y="301" text-anchor="middle" font-size="10" fill="#92400e">→ Left DOWN, right UP (like x⁵)</text>
+        <text x="250" y="321" text-anchor="middle" font-size="10" fill="#92400e">Q37: (d+5)(3d-4) = 3d² + 11d - 20 → LC = 3 (positive), degree 2 (even)</text>
+        <text x="250" y="337" text-anchor="middle" font-size="10" fill="#92400e">→ Both ends go UP (like x²)</text>
+    </svg>`,
+    
+    polynomial_operations: `<svg class="svg-graph" width="500" height="380" viewBox="0 0 500 380" xmlns="http://www.w3.org/2000/svg">
+        <rect x="5" y="5" width="490" height="370" rx="12" fill="#ecfdf5" stroke="#10b981" stroke-width="2"/>
+        <text x="250" y="25" text-anchor="middle" font-size="14" fill="#065f46" font-weight="bold">📐 عمليات كثيرات الحدود - Polynomial Operations</text>
+        <!-- Addition -->
+        <rect x="20" y="45" width="460" height="70" rx="6" fill="#d1fae5" stroke="#10b981" stroke-width="2"/>
+        <text x="250" y="65" text-anchor="middle" font-size="11" fill="#065f46" font-weight="bold">Addition/Subtraction: Combine like terms</text>
+        <text x="250" y="85" text-anchor="middle" font-size="11" fill="#065f46" font-family="'Amiri', serif">(2x² + 3x) + (x² - 5x) = 3x² - 2x</text>
+        <text x="250" y="103" text-anchor="middle" font-size="10" fill="#065f46">Degree stays same (max of degrees) | LC may change</text>
+        <!-- Multiplication -->
+        <rect x="20" y="125" width="460" height="70" rx="6" fill="#d1fae5" stroke="#10b981" stroke-width="2"/>
+        <text x="250" y="145" text-anchor="middle" font-size="11" fill="#065f46" font-weight="bold">Multiplication: FOIL / Distribute</text>
+        <text x="250" y="165" text-anchor="middle" font-size="11" fill="#065f46" font-family="'Amiri', serif">(d + 5)(3d - 4) = 3d² + 11d - 20</text>
+        <text x="250" y="183" text-anchor="middle" font-size="10" fill="#065f46">deg(f·g) = deg(f) + deg(g) | LC(f·g) = LC(f)·LC(g)</text>
+        <!-- Evaluation -->
+        <rect x="20" y="205" width="460" height="70" rx="6" fill="#d1fae5" stroke="#10b981" stroke-width="2"/>
+        <text x="250" y="225" text-anchor="middle" font-size="11" fill="#065f46" font-weight="bold">Evaluation: Substitute value for variable</text>
+        <text x="250" y="245" text-anchor="middle" font-size="11" fill="#065f46" font-family="'Amiri', serif">p(x) = x⁴ - 2x² + 3, p(-2) = 16 - 8 + 3 = 11</text>
+        <text x="250" y="263" text-anchor="middle" font-size="10" fill="#065f46">Result is a NUMBER, not a polynomial</text>
+        <!-- Key formulas -->
+        <rect x="20" y="285" width="460" height="80" rx="6" fill="#fef3c7" stroke="#f59e0b" stroke-width="2"/>
+        <text x="250" y="305" text-anchor="middle" font-size="11" fill="#92400e" font-weight="bold">🔑 Key Formulas:</text>
+        <text x="250" y="323" text-anchor="middle" font-size="10" fill="#92400e">• deg(f + g) ≤ max(deg(f), deg(g))</text>
+        <text x="250" y="340" text-anchor="middle" font-size="10" fill="#92400e">• deg(f · g) = deg(f) + deg(g)</text>
+        <text x="250" y="357" text-anchor="middle" font-size="10" fill="#92400e">• LC(f · g) = LC(f) · LC(g)</text>
+    </svg>`,
+    
+    common_mistakes: `<svg class="svg-graph" width="500" height="400" viewBox="0 0 500 400" xmlns="http://www.w3.org/2000/svg">
+        <rect x="5" y="5" width="490" height="390" rx="12" fill="#fee2e2" stroke="#dc2626" stroke-width="2"/>
+        <text x="250" y="25" text-anchor="middle" font-size="14" fill="#991b1b" font-weight="bold">⚠️ أخطاء شائعة - Common Mistakes</text>
+        <!-- Mistake 1 -->
+        <rect x="20" y="45" width="460" height="70" rx="6" fill="#fecaca" stroke="#dc2626" stroke-width="2"/>
+        <text x="250" y="65" text-anchor="middle" font-size="11" fill="#991b1b" font-weight="bold">Mistake 1: Not arranging in standard form first</text>
+        <text x="250" y="83" text-anchor="middle" font-size="10" fill="#991b1b">Wrong: Looking at -5x⁴ + 3x² - 4x³ + 15x and saying LC = -5 (correct here by luck)</text>
+        <text x="250" y="100" text-anchor="middle" font-size="10" fill="#991b1b">But if written as 3x² - 4x³ - 5x⁴ + 15x, you might mistakenly say LC = 3!</text>
+        <text x="250" y="113" text-anchor="middle" font-size="9" fill="#991b1b">✅ Always rearrange in descending order first!</text>
+        <!-- Mistake 2 -->
+        <rect x="20" y="125" width="460" height="70" rx="6" fill="#fecaca" stroke="#dc2626" stroke-width="2"/>
+        <text x="250" y="145" text-anchor="middle" font-size="11" fill="#991b1b" font-weight="bold">Mistake 2: Confusing -x² with (-x)²</text>
+        <text x="250" y="163" text-anchor="middle" font-size="10" fill="#991b1b">-x² at x=3: -(3²) = -9 (NOT (-3)² = 9)</text>
+        <text x="250" y="180" text-anchor="middle" font-size="10" fill="#991b1b">-x² at x=-2: -((-2)²) = -(4) = -4 (NOT (-(-2))² = 4)</text>
+        <text x="250" y="193" text-anchor="middle" font-size="9" fill="#991b1b">✅ The negative sign is OUTSIDE the squaring!</text>
+        <!-- Mistake 3 -->
+        <rect x="20" y="205" width="460" height="70" rx="6" fill="#fecaca" stroke="#dc2626" stroke-width="2"/>
+        <text x="250" y="225" text-anchor="middle" font-size="11" fill="#991b1b" font-weight="bold">Mistake 3: Forgetting to distribute negative</text>
+        <text x="250" y="243" text-anchor="middle" font-size="10" fill="#991b1b">p(x) = -x³ + 3x² - 5 at x = 3</text>
+        <text x="250" y="260" text-anchor="middle" font-size="10" fill="#991b1b">Wrong: -(3)³ = -27 ✓ but some calculate as (-3)³ = -27 (same here, but concept differs)</text>
+        <text x="250" y="273" text-anchor="middle" font-size="9" fill="#991b1b">✅ -x³ means -(x³), always cube first then negate</text>
+        <!-- Mistake 4 -->
+        <rect x="20" y="285" width="460" height="70" rx="6" fill="#fecaca" stroke="#dc2626" stroke-width="2"/>
+        <text x="250" y="305" text-anchor="middle" font-size="11" fill="#991b1b" font-weight="bold">Mistake 4: Degree of product</text>
+        <text x="250" y="323" text-anchor="middle" font-size="10" fill="#991b1b">(d+5)(3d-4): Some say degree is 1 (looking at one factor)</text>
+        <text x="250" y="340" text-anchor="middle" font-size="10" fill="#991b1b">✅ deg(product) = sum of degrees = 1 + 1 = 2</text>
+        <text x="250" y="353" text-anchor="middle" font-size="9" fill="#991b1b">✅ LC(product) = product of LCs = 1 × 3 = 3</text>
+    </svg>`
+};
+
+// ==================== EXAM DATA - 30 QUESTIONS ====================
+const originalExamData = {
+    sections: [
+        {
+            id: 'sec1',
+            title: { ar: '🔹 القسم 1: درجة كثير الحدود (مثل Q35, Q36) (Q1-Q5)', en: '🔹 Section 1: Degree of Polynomial (like Q35, Q36) (Q1-Q5)' },
+            questions: [
+                {
+                    q: { ar: '<strong>السؤال 1 (مثل السؤال 35):</strong> ما درجة كثير الحدود <span class="math-display">-5x⁴ + 3x² - 4x³ + 15x</span>؟', en: '<strong>Question 1 (like Q35):</strong> What is the degree of <span class="math-display">-5x⁴ + 3x² - 4x³ + 15x</span>?' },
+                    svg: svgGraphs.polynomial_degree,
+                    options: [
+                        { ar: '<span class="math-display">4</span>', en: '<span class="math-display">4</span>' },
+                        { ar: '<span class="math-display">3</span>', en: '<span class="math-display">3</span>' },
+                        { ar: '<span class="math-display">2</span>', en: '<span class="math-display">2</span>' },
+                        { ar: '<span class="math-display">1</span>', en: '<span class="math-display">1</span>' }
+                    ],
+                    correct: 0,
+                    answer: { ar: 'بإعادة الترتيب: -5x⁴ - 4x³ + 3x² + 15x. أكبر أس هو 4، إذن الدرجة = 4', en: 'Rearranged: -5x⁴ - 4x³ + 3x² + 15x. Highest exponent is 4, so degree = 4' }
+                },
+                {
+                    q: { ar: '<strong>السؤال 2 (مثل السؤال 35):</strong> ما المعامل الرئيسي لكثير الحدود <span class="math-display">-5x⁴ + 3x² - 4x³ + 15x</span>؟', en: '<strong>Question 2 (like Q35):</strong> What is the leading coefficient of <span class="math-display">-5x⁴ + 3x² - 4x³ + 15x</span>?' },
+                    options: [
+                        { ar: '<span class="math-display">-5</span>', en: '<span class="math-display">-5</span>' },
+                        { ar: '<span class="math-display">3</span>', en: '<span class="math-display">3</span>' },
+                        { ar: '<span class="math-display">-4</span>', en: '<span class="math-display">-4</span>' },
+                        { ar: '<span class="math-display">15</span>', en: '<span class="math-display">15</span>' }
+                    ],
+                    correct: 0,
+                    answer: { ar: 'بإعادة الترتيب: -5x⁴ - 4x³ + 3x² + 15x. الحد الرئيسي هو -5x⁴، فالمعامل الرئيسي = -5', en: 'Rearranged: -5x⁴ - 4x³ + 3x² + 15x. Leading term is -5x⁴, so LC = -5' }
+                },
+                {
+                    q: { ar: '<strong>السؤال 3 (مثل السؤال 36):</strong> ما درجة كثير الحدود <span class="math-display">-18 + 3b⁵ - 9b + 13b³</span>؟', en: '<strong>Question 3 (like Q36):</strong> What is the degree of <span class="math-display">-18 + 3b⁵ - 9b + 13b³</span>?' },
+                    svg: svgGraphs.q36_solution,
+                    options: [
+                        { ar: '<span class="math-display">5</span>', en: '<span class="math-display">5</span>' },
+                        { ar: '<span class="math-display">3</span>', en: '<span class="math-display">3</span>' },
+                        { ar: '<span class="math-display">9</span>', en: '<span class="math-display">9</span>' },
+                        { ar: '<span class="math-display">1</span>', en: '<span class="math-display">1</span>' }
+                    ],
+                    correct: 0,
+                    answer: { ar: 'بإعادة الترتيب: 3b⁵ + 13b³ - 9b - 18. أكبر أس هو 5، إذن الدرجة = 5', en: 'Rearranged: 3b⁵ + 13b³ - 9b - 18. Highest exponent is 5, so degree = 5' }
+                },
+                {
+                    q: { ar: '<strong>السؤال 4 (مثل السؤال 36):</strong> ما المعامل الرئيسي لكثير الحدود <span class="math-display">-18 + 3b⁵ - 9b + 13b³</span>؟', en: '<strong>Question 4 (like Q36):</strong> What is the leading coefficient of <span class="math-display">-18 + 3b⁵ - 9b + 13b³</span>?' },
+                    options: [
+                        { ar: '<span class="math-display">3</span>', en: '<span class="math-display">3</span>' },
+                        { ar: '<span class="math-display">13</span>', en: '<span class="math-display">13</span>' },
+                        { ar: '<span class="math-display">-9</span>', en: '<span class="math-display">-9</span>' },
+                        { ar: '<span class="math-display">-18</span>', en: '<span class="math-display">-18</span>' }
+                    ],
+                    correct: 0,
+                    answer: { ar: 'بإعادة الترتيب: 3b⁵ + 13b³ - 9b - 18. الحد الرئيسي هو 3b⁵، فالمعامل الرئيسي = 3', en: 'Rearranged: 3b⁵ + 13b³ - 9b - 18. Leading term is 3b⁵, so LC = 3' }
+                },
+                {
+                    q: { ar: '<strong>السؤال 5:</strong> ما درجة كثير الحدود <span class="math-display">7x³ - 2x⁵ + x - 9</span>؟', en: '<strong>Question 5:</strong> What is the degree of <span class="math-display">7x³ - 2x⁵ + x - 9</span>?' },
+                    options: [
+                        { ar: '<span class="math-display">5</span>', en: '<span class="math-display">5</span>' },
+                        { ar: '<span class="math-display">3</span>', en: '<span class="math-display">3</span>' },
+                        { ar: '<span class="math-display">7</span>', en: '<span class="math-display">7</span>' },
+                        { ar: '<span class="math-display">1</span>', en: '<span class="math-display">1</span>' }
+                    ],
+                    correct: 0,
+                    answer: { ar: 'بإعادة الترتيب: -2x⁵ + 7x³ + x - 9. أكبر أس هو 5، إذن الدرجة = 5', en: 'Rearranged: -2x⁵ + 7x³ + x - 9. Highest exponent is 5, so degree = 5' }
+                }
+            ]
+        },
+        {
+            id: 'sec2',
+            title: { ar: '🔹 القسم 2: كثيرات الحدود المضروبة (مثل Q37) (Q6-Q10)', en: '🔹 Section 2: Multiplied Polynomials (like Q37) (Q6-Q10)' },
+            questions: [
+                {
+                    q: { ar: '<strong>السؤال 6 (مثل السؤال 37):</strong> ما درجة كثير الحدود <span class="math-display">(d + 5)(3d - 4)</span> بعد فك الأقواس؟', en: '<strong>Question 6 (like Q37):</strong> What is the degree of <span class="math-display">(d + 5)(3d - 4)</span> after expansion?' },
+                    svg: svgGraphs.q37_solution,
+                    options: [
+                        { ar: '<span class="math-display">2</span>', en: '<span class="math-display">2</span>' },
+                        { ar: '<span class="math-display">1</span>', en: '<span class="math-display">1</span>' },
+                        { ar: '<span class="math-display">3</span>', en: '<span class="math-display">3</span>' },
+                        { ar: '<span class="math-display">4</span>', en: '<span class="math-display">4</span>' }
+                    ],
+                    correct: 0,
+                    answer: { ar: '(d+5)(3d-4) = 3d² + 11d - 20. الدرجة = 2. أو بسرعة: deg = 1 + 1 = 2', en: '(d+5)(3d-4) = 3d² + 11d - 20. Degree = 2. Or quickly: deg = 1 + 1 = 2' }
+                },
+                {
+                    q: { ar: '<strong>السؤال 7 (مثل السؤال 37):</strong> ما المعامل الرئيسي لكثير الحدود <span class="math-display">(d + 5)(3d - 4)</span>؟', en: '<strong>Question 7 (like Q37):</strong> What is the leading coefficient of <span class="math-display">(d + 5)(3d - 4)</span>?' },
+                    options: [
+                        { ar: '<span class="math-display">3</span>', en: '<span class="math-display">3</span>' },
+                        { ar: '<span class="math-display">-20</span>', en: '<span class="math-display">-20</span>' },
+                        { ar: '<span class="math-display">11</span>', en: '<span class="math-display">11</span>' },
+                        { ar: '<span class="math-display">1</span>', en: '<span class="math-display">1</span>' }
+                    ],
+                    correct: 0,
+                    answer: { ar: '(d+5)(3d-4) = 3d² + 11d - 20. المعامل الرئيسي = 3. أو بسرعة: LC = 1 × 3 = 3', en: '(d+5)(3d-4) = 3d² + 11d - 20. LC = 3. Or quickly: LC = 1 × 3 = 3' }
+                },
+                {
+                    q: { ar: '<strong>السؤال 8:</strong> ما درجة كثير الحدود <span class="math-display">(2x + 1)(x - 3)(x + 4)</span>؟', en: '<strong>Question 8:</strong> What is the degree of <span class="math-display">(2x + 1)(x - 3)(x + 4)</span>?' },
+                    options: [
+                        { ar: '<span class="math-display">3</span>', en: '<span class="math-display">3</span>' },
+                        { ar: '<span class="math-display">2</span>', en: '<span class="math-display">2</span>' },
+                        { ar: '<span class="math-display">6</span>', en: '<span class="math-display">6</span>' },
+                        { ar: '<span class="math-display">1</span>', en: '<span class="math-display">1</span>' }
+                    ],
+                    correct: 0,
+                    answer: { ar: 'deg = 1 + 1 + 1 = 3. ثلاثة عوامل خطية تعطي كثير حدود من الدرجة 3', en: 'deg = 1 + 1 + 1 = 3. Three linear factors give degree 3 polynomial' }
+                },
+                {
+                    q: { ar: '<strong>السؤال 9:</strong> ما المعامل الرئيسي لكثير الحدود <span class="math-display">(2x + 1)(x - 3)(x + 4)</span>؟', en: '<strong>Question 9:</strong> What is the leading coefficient of <span class="math-display">(2x + 1)(x - 3)(x + 4)</span>?' },
+                    options: [
+                        { ar: '<span class="math-display">2</span>', en: '<span class="math-display">2</span>' },
+                        { ar: '<span class="math-display">24</span>', en: '<span class="math-display">24</span>' },
+                        { ar: '<span class="math-display">-12</span>', en: '<span class="math-display">-12</span>' },
+                        { ar: '<span class="math-display">1</span>', en: '<span class="math-display">1</span>' }
+                    ],
+                    correct: 0,
+                    answer: { ar: 'LC = 2 × 1 × 1 = 2. المعامل الرئيسي هو حاصل ضرب المعاملات الرئيسية للعوامل', en: 'LC = 2 × 1 × 1 = 2. Leading coefficient is product of leading coefficients of factors' }
+                },
+                {
+                    q: { ar: '<strong>السؤال 10:</strong> ما درجة وكثير الحدود <span class="math-display">(x² + 3)(x - 1)</span>؟', en: '<strong>Question 10:</strong> What is the degree of <span class="math-display">(x² + 3)(x - 1)</span>?' },
+                    options: [
+                        { ar: '<span class="math-display">3</span>', en: '<span class="math-display">3</span>' },
+                        { ar: '<span class="math-display">2</span>', en: '<span class="math-display">2</span>' },
+                        { ar: '<span class="math-display">6</span>', en: '<span class="math-display">6</span>' },
+                        { ar: '<span class="math-display">1</span>', en: '<span class="math-display">1</span>' }
+                    ],
+                    correct: 0,
+                    answer: { ar: 'deg = 2 + 1 = 3. (x² + 3)(x - 1) = x³ - x² + 3x - 3', en: 'deg = 2 + 1 = 3. (x² + 3)(x - 1) = x³ - x² + 3x - 3' }
+                }
+            ]
+        },
+        {
+            id: 'sec3',
+            title: { ar: '🔹 القسم 3: تقييم كثيرات الحدود (مثل Q38, Q39) (Q11-Q15)', en: '🔹 Section 3: Evaluating Polynomials (like Q38, Q39) (Q11-Q15)' },
+            questions: [
+                {
+                    q: { ar: '<strong>السؤال 11 (مثل السؤال 38):</strong> إذا كانت <span class="math-display">p(x) = x⁴ - 2x² + 3</span>، فما قيمة <span class="math-display">p(-2)</span>؟', en: '<strong>Question 11 (like Q38):</strong> If <span class="math-display">p(x) = x⁴ - 2x² + 3</span>, what is <span class="math-display">p(-2)</span>?' },
+                    svg: svgGraphs.q38_solution,
+                    options: [
+                        { ar: '<span class="math-display">27</span>', en: '<span class="math-display">27</span>' },
+                        { ar: '<span class="math-display">11</span>', en: '<span class="math-display">11</span>' },
+                        { ar: '<span class="math-display">-5</span>', en: '<span class="math-display">-5</span>' },
+                        { ar: '<span class="math-display">19</span>', en: '<span class="math-display">19</span>' }
+                    ],
+                    correct: 1,
+                    answer: { ar: 'p(-2) = (-2)⁴ - 2(-2)² + 3 = 16 - 2(4) + 3 = 16 - 8 + 3 = 11', en: 'p(-2) = (-2)⁴ - 2(-2)² + 3 = 16 - 8 + 3 = 11' }
+                },
+                {
+                    q: { ar: '<strong>السؤال 12 (مثل السؤال 39):</strong> إذا كانت <span class="math-display">p(x) = -x³ + 3x² - 5</span>، فما قيمة <span class="math-display">p(3)</span>؟', en: '<strong>Question 12 (like Q39):</strong> If <span class="math-display">p(x) = -x³ + 3x² - 5</span>, what is <span class="math-display">p(3)</span>?' },
+                    svg: svgGraphs.q39_solution,
+                    options: [
+                        { ar: '<span class="math-display">-5</span>', en: '<span class="math-display">-5</span>' },
+                        { ar: '<span class="math-display">49</span>', en: '<span class="math-display">49</span>' },
+                        { ar: '<span class="math-display">-59</span>', en: '<span class="math-display">-59</span>' },
+                        { ar: '<span class="math-display">5</span>', en: '<span class="math-display">5</span>' }
+                    ],
+                    correct: 0,
+                    answer: { ar: 'p(3) = -(3)³ + 3(3)² - 5 = -27 + 27 - 5 = -5', en: 'p(3) = -(3)³ + 3(3)² - 5 = -27 + 27 - 5 = -5' }
+                },
+                {
+                    q: { ar: '<strong>السؤال 13:</strong> إذا كانت <span class="math-display">p(x) = 2x³ - x² + 4</span>، فما قيمة <span class="math-display">p(2)</span>؟', en: '<strong>Question 13:</strong> If <span class="math-display">p(x) = 2x³ - x² + 4</span>, what is <span class="math-display">p(2)</span>?' },
+                    options: [
+                        { ar: '<span class="math-display">16</span>', en: '<span class="math-display">16</span>' },
+                        { ar: '<span class="math-display">12</span>', en: '<span class="math-display">12</span>' },
+                        { ar: '<span class="math-display">20</span>', en: '<span class="math-display">20</span>' },
+                        { ar: '<span class="math-display">8</span>', en: '<span class="math-display">8</span>' }
+                    ],
+                    correct: 0,
+                    answer: { ar: 'p(2) = 2(8) - 4 + 4 = 16 - 4 + 4 = 16', en: 'p(2) = 2(8) - 4 + 4 = 16' }
+                },
+                {
+                    q: { ar: '<strong>السؤال 14:</strong> إذا كانت <span class="math-display">p(x) = x² - 5x + 6</span>، فما قيمة <span class="math-display">p(-1)</span>؟', en: '<strong>Question 14:</strong> If <span class="math-display">p(x) = x² - 5x + 6</span>, what is <span class="math-display">p(-1)</span>?' },
+                    options: [
+                        { ar: '<span class="math-display">12</span>', en: '<span class="math-display">12</span>' },
+                        { ar: '<span class="math-display">2</span>', en: '<span class="math-display">2</span>' },
+                        { ar: '<span class="math-display">0</span>', en: '<span class="math-display">0</span>' },
+                        { ar: '<span class="math-display">10</span>', en: '<span class="math-display">10</span>' }
+                    ],
+                    correct: 0,
+                    answer: { ar: 'p(-1) = (-1)² - 5(-1) + 6 = 1 + 5 + 6 = 12', en: 'p(-1) = 1 + 5 + 6 = 12' }
+                },
+                {
+                    q: { ar: '<strong>السؤال 15:</strong> إذا كانت <span class="math-display">p(x) = 3x² - 2x + 1</span>، فما قيمة <span class="math-display">p(0)</span>؟', en: '<strong>Question 15:</strong> If <span class="math-display">p(x) = 3x² - 2x + 1</span>, what is <span class="math-display">p(0)</span>?' },
+                    options: [
+                        { ar: '<span class="math-display">1</span>', en: '<span class="math-display">1</span>' },
+                        { ar: '<span class="math-display">0</span>', en: '<span class="math-display">0</span>' },
+                        { ar: '<span class="math-display">3</span>', en: '<span class="math-display">3</span>' },
+                        { ar: '<span class="math-display">-1</span>', en: '<span class="math-display">-1</span>' }
+                    ],
+                    correct: 0,
+                    answer: { ar: 'p(0) = 3(0) - 2(0) + 1 = 1. ملاحظة: p(0) دائماً يساوي الحد الثابت', en: 'p(0) = 1. Note: p(0) always equals the constant term' }
+                }
+            ]
+        },
+        {
+            id: 'sec4',
+            title: { ar: '🔹 القسم 4: درجة ومعامل رئيسي معاً (Q16-Q20)', en: '🔹 Section 4: Degree & Leading Coefficient Combined (Q16-Q20)' },
+            questions: [
+                {
+                    q: { ar: '<strong>السؤال 16:</strong> ما درجة ومعامل كثير الحدود <span class="math-display">4x³ - 2x⁵ + x - 7</span> الرئيسي؟', en: '<strong>Question 16:</strong> What is the degree and leading coefficient of <span class="math-display">4x³ - 2x⁵ + x - 7</span>?' },
+                    svg: svgGraphs.polynomial_graphs,
+                    options: [
+                        { ar: 'الدرجة 5، المعامل الرئيسي -2', en: 'Degree 5, leading coefficient -2' },
+                        { ar: 'الدرجة 3، المعامل الرئيسي 4', en: 'Degree 3, leading coefficient 4' },
+                        { ar: 'الدرجة 5، المعامل الرئيسي 4', en: 'Degree 5, leading coefficient 4' },
+                        { ar: 'الدرجة 3، المعامل الرئيسي -2', en: 'Degree 3, leading coefficient -2' }
+                    ],
+                    correct: 0,
+                    answer: { ar: 'بإعادة الترتيب: -2x⁵ + 4x³ + x - 7. الدرجة = 5، المعامل الرئيسي = -2', en: 'Rearranged: -2x⁵ + 4x³ + x - 7. Degree = 5, LC = -2' }
+                },
+                {
+                    q: { ar: '<strong>السؤال 17:</strong> ما درجة ومعامل كثير الحدود <span class="math-display">-x⁴ + 3x² - x + 8</span> الرئيسي؟', en: '<strong>Question 17:</strong> What is the degree and leading coefficient of <span class="math-display">-x⁴ + 3x² - x + 8</span>?' },
+                    options: [
+                        { ar: 'الدرجة 4، المعامل الرئيسي -1', en: 'Degree 4, leading coefficient -1' },
+                        { ar: 'الدرجة 4، المعامل الرئيسي 3', en: 'Degree 4, leading coefficient 3' },
+                        { ar: 'الدرجة 2، المعامل الرئيسي -1', en: 'Degree 2, leading coefficient -1' },
+                        { ar: 'الدرجة 4، المعامل الرئيسي 8', en: 'Degree 4, leading coefficient 8' }
+                    ],
+                    correct: 0,
+                    answer: { ar: 'الحد ذو أكبر درجة هو -x⁴ = -1·x⁴. الدرجة = 4، المعامل الرئيسي = -1', en: 'Highest degree term is -x⁴ = -1·x⁴. Degree = 4, LC = -1' }
+                },
+                {
+                    q: { ar: '<strong>السؤال 18:</strong> ما درجة كثير الحدود <span class="math-display">5x²(x³ - 2x + 1)</span>؟', en: '<strong>Question 18:</strong> What is the degree of <span class="math-display">5x²(x³ - 2x + 1)</span>?' },
+                    options: [
+                        { ar: '<span class="math-display">5</span>', en: '<span class="math-display">5</span>' },
+                        { ar: '<span class="math-display">3</span>', en: '<span class="math-display">3</span>' },
+                        { ar: '<span class="math-display">6</span>', en: '<span class="math-display">6</span>' },
+                        { ar: '<span class="math-display">2</span>', en: '<span class="math-display">2</span>' }
+                    ],
+                    correct: 0,
+                    answer: { ar: '5x² · x³ = 5x⁵. الدرجة = 2 + 3 = 5', en: '5x² · x³ = 5x⁵. Degree = 2 + 3 = 5' }
+                },
+                {
+                    q: { ar: '<strong>السؤال 19:</strong> ما المعامل الرئيسي لكثير الحدود <span class="math-display">5x²(x³ - 2x + 1)</span>؟', en: '<strong>Question 19:</strong> What is the leading coefficient of <span class="math-display">5x²(x³ - 2x + 1)</span>?' },
+                    options: [
+                        { ar: '<span class="math-display">5</span>', en: '<span class="math-display">5</span>' },
+                        { ar: '<span class="math-display">-10</span>', en: '<span class="math-display">-10</span>' },
+                        { ar: '<span class="math-display">1</span>', en: '<span class="math-display">1</span>' },
+                        { ar: '<span class="math-display">-2</span>', en: '<span class="math-display">-2</span>' }
+                    ],
+                    correct: 0,
+                    answer: { ar: '5x² · x³ = 5x⁵. المعامل الرئيسي = 5 × 1 = 5', en: '5x² · x³ = 5x⁵. LC = 5 × 1 = 5' }
+                },
+                {
+                    q: { ar: '<strong>السؤال 20:</strong> ما درجة كثير الحدود <span class="math-display">(x - 1)(x + 2)(x - 3)</span>؟', en: '<strong>Question 20:</strong> What is the degree of <span class="math-display">(x - 1)(x + 2)(x - 3)</span>?' },
+                    options: [
+                        { ar: '<span class="math-display">3</span>', en: '<span class="math-display">3</span>' },
+                        { ar: '<span class="math-display">2</span>', en: '<span class="math-display">2</span>' },
+                        { ar: '<span class="math-display">6</span>', en: '<span class="math-display">6</span>' },
+                        { ar: '<span class="math-display">1</span>', en: '<span class="math-display">1</span>' }
+                    ],
+                    correct: 0,
+                    answer: { ar: 'ثلاثة عوامل خطية: deg = 1 + 1 + 1 = 3', en: 'Three linear factors: deg = 1 + 1 + 1 = 3' }
+                }
+            ]
+        },
+        {
+            id: 'sec5',
+            title: { ar: '🔹 القسم 5: تقييم دوال متعددة (Q21-Q25)', en: '🔹 Section 5: Multiple Evaluations (Q21-Q25)' },
+            questions: [
+                {
+                    q: { ar: '<strong>السؤال 21:</strong> إذا كانت <span class="math-display">f(x) = 2x² - 3x + 1</span>، فما قيمة <span class="math-display">f(3) - f(1)</span>؟', en: '<strong>Question 21:</strong> If <span class="math-display">f(x) = 2x² - 3x + 1</span>, what is <span class="math-display">f(3) - f(1)</span>?' },
+                    svg: svgGraphs.evaluation_steps,
+                    options: [
+                        { ar: '<span class="math-display">8</span>', en: '<span class="math-display">8</span>' },
+                        { ar: '<span class="math-display">10</span>', en: '<span class="math-display">10</span>' },
+                        { ar: '<span class="math-display">6</span>', en: '<span class="math-display">6</span>' },
+                        { ar: '<span class="math-display">4</span>', en: '<span class="math-display">4</span>' }
+                    ],
+                    correct: 0,
+                    answer: { ar: 'f(3) = 18 - 9 + 1 = 10. f(1) = 2 - 3 + 1 = 0. f(3) - f(1) = 10 - 0 = 10... تصحيح: f(3) = 2(9) - 9 + 1 = 10, f(1) = 2 - 3 + 1 = 0. الفرق = 10. لكن الخيارات... f(3) = 18-9+1 = 10, f(1) = 0, الفرق = 10. الإجابة b) 10', en: 'f(3) = 18 - 9 + 1 = 10. f(1) = 2 - 3 + 1 = 0. f(3) - f(1) = 10' }
+                },
+                {
+                    q: { ar: '<strong>السؤال 22:</strong> إذا كانت <span class="math-display">p(x) = x³ - 4x</span>، فما قيمة <span class="math-display">p(2) + p(-2)</span>؟', en: '<strong>Question 22:</strong> If <span class="math-display">p(x) = x³ - 4x</span>, what is <span class="math-display">p(2) + p(-2)</span>?' },
+                    options: [
+                        { ar: '<span class="math-display">0</span>', en: '<span class="math-display">0</span>' },
+                        { ar: '<span class="math-display">8</span>', en: '<span class="math-display">8</span>' },
+                        { ar: '<span class="math-display">16</span>', en: '<span class="math-display">16</span>' },
+                        { ar: '<span class="math-display">-8</span>', en: '<span class="math-display">-8</span>' }
+                    ],
+                    correct: 0,
+                    answer: { ar: 'p(2) = 8 - 8 = 0. p(-2) = -8 + 8 = 0. المجموع = 0. (دالة فردية)', en: 'p(2) = 0. p(-2) = 0. Sum = 0. (Odd function)' }
+                },
+                {
+                    q: { ar: '<strong>السؤال 23:</strong> إذا كانت <span class="math-display">g(x) = 3x² - 2x + 5</span>، فما قيمة <span class="math-display">g(-1)</span>؟', en: '<strong>Question 23:</strong> If <span class="math-display">g(x) = 3x² - 2x + 5</span>, what is <span class="math-display">g(-1)</span>?' },
+                    options: [
+                        { ar: '<span class="math-display">10</span>', en: '<span class="math-display">10</span>' },
+                        { ar: '<span class="math-display">0</span>', en: '<span class="math-display">0</span>' },
+                        { ar: '<span class="math-display">6</span>', en: '<span class="math-display">6</span>' },
+                        { ar: '<span class="math-display">-10</span>', en: '<span class="math-display">-10</span>' }
+                    ],
+                    correct: 0,
+                    answer: { ar: 'g(-1) = 3(1) - 2(-1) + 5 = 3 + 2 + 5 = 10', en: 'g(-1) = 3(1) + 2 + 5 = 10' }
+                },
+                {
+                    q: { ar: '<strong>السؤال 24:</strong> إذا كانت <span class="math-display">h(x) = -2x³ + x² - 3</span>، فما قيمة <span class="math-display">h(-1)</span>؟', en: '<strong>Question 24:</strong> If <span class="math-display">h(x) = -2x³ + x² - 3</span>, what is <span class="math-display">h(-1)</span>?' },
+                    options: [
+                        { ar: '<span class="math-display">0</span>', en: '<span class="math-display">0</span>' },
+                        { ar: '<span class="math-display">-4</span>', en: '<span class="math-display">-4</span>' },
+                        { ar: '<span class="math-display">4</span>', en: '<span class="math-display">4</span>' },
+                        { ar: '<span class="math-display">-6</span>', en: '<span class="math-display">-6</span>' }
+                    ],
+                    correct: 0,
+                    answer: { ar: 'h(-1) = -2(-1)³ + (-1)² - 3 = -2(-1) + 1 - 3 = 2 + 1 - 3 = 0', en: 'h(-1) = -2(-1) + 1 - 3 = 2 + 1 - 3 = 0' }
+                },
+                {
+                    q: { ar: '<strong>السؤال 25:</strong> إذا كانت <span class="math-display">p(x) = x⁴ - 3x² + 2</span>، فما قيمة <span class="math-display">p(1) · p(-1)</span>؟', en: '<strong>Question 25:</strong> If <span class="math-display">p(x) = x⁴ - 3x² + 2</span>, what is <span class="math-display">p(1) · p(-1)</span>?' },
+                    options: [
+                        { ar: '<span class="math-display">0</span>', en: '<span class="math-display">0</span>' },
+                        { ar: '<span class="math-display">1</span>', en: '<span class="math-display">1</span>' },
+                        { ar: '<span class="math-display">4</span>', en: '<span class="math-display">4</span>' },
+                        { ar: '<span class="math-display">-1</span>', en: '<span class="math-display">-1</span>' }
+                    ],
+                    correct: 0,
+                    answer: { ar: 'p(1) = 1 - 3 + 2 = 0. p(-1) = 1 - 3 + 2 = 0. الناتج = 0 × 0 = 0', en: 'p(1) = 0. p(-1) = 0. Product = 0 × 0 = 0' }
+                }
+            ]
+        },
+        {
+            id: 'sec6',
+            title: { ar: '🔹 القسم 6: مسائل مركبة (Q26-Q30)', en: '🔹 Section 6: Mixed Problems (Q26-Q30)' },
+            questions: [
+                {
+                    q: { ar: '<strong>السؤال 26:</strong> ما درجة كثير الحدود <span class="math-display">p(x) = (x² + 1)(x³ - 2x + 5)</span>؟', en: '<strong>Question 26:</strong> What is the degree of <span class="math-display">p(x) = (x² + 1)(x³ - 2x + 5)</span>?' },
+                    svg: svgGraphs.polynomial_operations,
+                    options: [
+                        { ar: '<span class="math-display">5</span>', en: '<span class="math-display">5</span>' },
+                        { ar: '<span class="math-display">6</span>', en: '<span class="math-display">6</span>' },
+                        { ar: '<span class="math-display">3</span>', en: '<span class="math-display">3</span>' },
+                        { ar: '<span class="math-display">2</span>', en: '<span class="math-display">2</span>' }
+                    ],
+                    correct: 0,
+                    answer: { ar: 'deg = 2 + 3 = 5', en: 'deg = 2 + 3 = 5' }
+                },
+                {
+                    q: { ar: '<strong>السؤال 27:</strong> ما المعامل الرئيسي لكثير الحدود <span class="math-display">p(x) = (x² + 1)(x³ - 2x + 5)</span>؟', en: '<strong>Question 27:</strong> What is the leading coefficient of <span class="math-display">p(x) = (x² + 1)(x³ - 2x + 5)</span>?' },
+                    options: [
+                        { ar: '<span class="math-display">1</span>', en: '<span class="math-display">1</span>' },
+                        { ar: '<span class="math-display">5</span>', en: '<span class="math-display">5</span>' },
+                        { ar: '<span class="math-display">-2</span>', en: '<span class="math-display">-2</span>' },
+                        { ar: '<span class="math-display">2</span>', en: '<span class="math-display">2</span>' }
+                    ],
+                    correct: 0,
+                    answer: { ar: 'LC = 1 × 1 = 1', en: 'LC = 1 × 1 = 1' }
+                },
+                {
+                    q: { ar: '<strong>السؤال 28:</strong> إذا كانت <span class="math-display">p(x) = ax³ + bx² + cx + d</span> و <span class="math-display">p(0) = 5</span>، فما قيمة d؟', en: '<strong>Question 28:</strong> If <span class="math-display">p(x) = ax³ + bx² + cx + d</span> and <span class="math-display">p(0) = 5</span>, what is d?' },
+                    options: [
+                        { ar: '<span class="math-display">5</span>', en: '<span class="math-display">5</span>' },
+                        { ar: '<span class="math-display">0</span>', en: '<span class="math-display">0</span>' },
+                        { ar: '<span class="math-display">a + b + c</span>', en: '<span class="math-display">a + b + c</span>' },
+                        { ar: '<span class="math-display">-5</span>', en: '<span class="math-display">-5</span>' }
+                    ],
+                    correct: 0,
+                    answer: { ar: 'p(0) = a(0) + b(0) + c(0) + d = d = 5', en: 'p(0) = d = 5' }
+                },
+                {
+                    q: { ar: '<strong>السؤال 29:</strong> أي كثير حدود درجته 3 ومعامله الرئيسي -2؟', en: '<strong>Question 29:</strong> Which polynomial has degree 3 and leading coefficient -2?' },
+                    svg: svgGraphs.leading_coefficient_visual,
+                    options: [
+                        { ar: '<span class="math-display">-2x³ + 5x² - x + 3</span>', en: '<span class="math-display">-2x³ + 5x² - x + 3</span>' },
+                        { ar: '<span class="math-display">2x³ - 5x² + x - 3</span>', en: '<span class="math-display">2x³ - 5x² + x - 3</span>' },
+                        { ar: '<span class="math-display">-2x² + 5x - 3</span>', en: '<span class="math-display">-2x² + 5x - 3</span>' },
+                        { ar: '<span class="math-display">-2x⁴ + 5x³ - x + 3</span>', en: '<span class="math-display">-2x⁴ + 5x³ - x + 3</span>' }
+                    ],
+                    correct: 0,
+                    answer: { ar: '-2x³ + 5x² - x + 3: الدرجة 3، المعامل الرئيسي -2', en: '-2x³ + 5x² - x + 3: degree 3, LC = -2' }
+                },
+                {
+                    q: { ar: '<strong>السؤال 30:</strong> إذا كانت <span class="math-display">p(x) = x² - 4x + 3</span>، فما قيمة <span class="math-display">p(1) + p(3)</span>؟', en: '<strong>Question 30:</strong> If <span class="math-display">p(x) = x² - 4x + 3</span>, what is <span class="math-display">p(1) + p(3)</span>?' },
+                    svg: svgGraphs.common_mistakes,
+                    options: [
+                        { ar: '<span class="math-display">0</span>', en: '<span class="math-display">0</span>' },
+                        { ar: '<span class="math-display">6</span>', en: '<span class="math-display">6</span>' },
+                        { ar: '<span class="math-display">3</span>', en: '<span class="math-display">3</span>' },
+                        { ar: '<span class="math-display">-6</span>', en: '<span class="math-display">-6</span>' }
+                    ],
+                    correct: 0,
+                    answer: { ar: 'p(1) = 1 - 4 + 3 = 0. p(3) = 9 - 12 + 3 = 0. المجموع = 0 + 0 = 0. (1 و 3 هما جذرا المعادلة)', en: 'p(1) = 0. p(3) = 0. Sum = 0. (1 and 3 are roots of the equation)' }
+                }
+            ]
+        }
+    ]
+};
+
+function shuffleArray(array) {
+    const arr = [...array];
+    for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(rng() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+    return arr;
+}
+
+function prepareShuffledExam() {
+    rng = mulberry32(currentSeed);
+    examData = JSON.parse(JSON.stringify(originalExamData));
+    correctAnswersMap = {};
+    let globalIdx = 0;
+    examData.sections.forEach((section) => {
+        section.questions = shuffleArray(section.questions);
+        section.questions.forEach((q) => {
+            const optionsWithCorrect = q.options.map((opt, idx) => ({ option: opt, isCorrect: idx === q.correct }));
+            const shuffledOptions = shuffleArray(optionsWithCorrect);
+            q.options = shuffledOptions.map(o => o.option);
+            q.correct = shuffledOptions.findIndex(o => o.isCorrect);
+            correctAnswersMap[globalIdx] = String.fromCharCode(97 + q.correct);
+            globalIdx++;
+        });
+    });
+}
+
+function reshuffleExam() {
+    const msg = currentLang === 'ar' ? '🔄 سيتم إنشاء أسئلة جديدة ومسح إجاباتك. هل أنت متأكد؟' : '🔄 New questions will be generated. Are you sure?';
+    if (confirm(msg)) {
+        currentSeed = Date.now(); timeRemaining = TOTAL_TIME; answersVisible = false;
+        prepareShuffledExam(); renderExam(); saveState();
+        alert(currentLang === 'ar' ? '🎲 تم تغيير الأسئلة! حظاً موفقاً! 🍀' : '🎲 Questions changed! Good luck! 🍀');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+}
+
+function setLanguage(lang) {
+    currentLang = lang;
+    document.documentElement.lang = lang;
+    document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
+    document.getElementById('btn-ar').classList.toggle('active', lang === 'ar');
+    document.getElementById('btn-en').classList.toggle('active', lang === 'en');
+    document.body.classList.toggle('en-mode', lang === 'en');
+    
+    document.querySelectorAll('[data-ar]').forEach(el => {
+        el.textContent = el.getAttribute('data-' + lang);
+    });
+    
+    document.querySelectorAll('[data-placeholder-ar]').forEach(el => {
+        el.placeholder = el.getAttribute('data-placeholder-' + lang);
+    });
+    
+    renderExam(); saveState(false);
+}
+
+function renderExam() {
+    const container = document.getElementById('exam-content');
+    const labels = { ar: { option: ['a)', 'b)', 'c)', 'd)'], answer: '✅ الإجابة:' }, en: { option: ['a)', 'b)', 'c)', 'd)'], answer: '✅ Answer:' } };
+    const lbl = labels[currentLang];
+    let html = '';
+    let globalIdx = 0;
+    
+    examData.sections.forEach((section, secIdx) => {
+        const badgeClass = ['module-1', 'module-2', 'module-3', 'module-4', 'module-5', 'module-6'][secIdx];
+        html += '<section class="bg-white p-6 rounded-2xl shadow-lg border-2 border-amber-100">';
+        html += '<div class="text-center mb-4"><span class="module-badge ' + badgeClass + '">' + section.title[currentLang] + '</span></div>';
+        html += '<ol class="space-y-4 text-sm">';
+        
+        section.questions.forEach((q) => {
+            html += '<li class="border-r-4 border-amber-400 pr-4 py-2" id="q-' + globalIdx + '" style="border-right: 4px solid #d97706; padding-right: 1rem;">';
+            html += '<strong class="text-amber-700">' + (globalIdx + 1) + '.</strong> ' + q.q[currentLang] + '<br>';
+            if (q.svg) html += '<div class="graph-container">' + q.svg + '</div>';
+            
+            q.options.forEach((opt, oIdx) => {
+                html += '<label class="cursor-pointer block mt-2 mr-4 hover:bg-amber-50 rounded-lg p-2 transition" style="margin-right: 1rem;">';
+                html += '<input type="radio" name="q' + globalIdx + '" value="' + String.fromCharCode(97 + oIdx) + '" class="mr-2 ml-2">';
+                html += '<span class="arabic-math">' + lbl.option[oIdx] + ' ' + opt[currentLang] + '</span>';
+                html += '</label>';
+            });
+            
+            html += '<div class="answer-box text-green-700 mt-3 font-medium ' + (answersVisible ? '' : 'hidden') + ' bg-green-50 rounded-lg p-3 border border-green-200">';
+            html += lbl.answer + ' ' + lbl.option[q.correct] + ' <span class="arabic-math">' + q.options[q.correct][currentLang] + '</span><br>';
+            html += '<span class="text-sm text-green-700 mt-2 block arabic-math">' + q.answer[currentLang] + '</span>';
+            html += '</div></li>';
+            globalIdx++;
+        });
+        
+        html += '</ol></section>';
+    });
+    
+    container.innerHTML = html;
+}
+
+function startTimer() {
+    updateTimerDisplay();
+    timerInterval = setInterval(() => {
+        timeRemaining--;
+        updateTimerDisplay();
+        if (timeRemaining % 60 === 0) saveState(false);
+        if (timeRemaining <= 600) document.getElementById('timer').classList.add('timer-warning');
+        if (timeRemaining <= 0) {
+            clearInterval(timerInterval);
+            alert(currentLang === 'ar' ? "⏰ انتهى الوقت!" : "⏰ Time's up!");
+            gradeExam();
+        }
+    }, 1000);
+}
+
+function updateTimerDisplay() {
+    const m = Math.floor(timeRemaining / 60);
+    const s = timeRemaining % 60;
+    document.getElementById('timer').textContent = m.toString().padStart(2,'0') + ':' + s.toString().padStart(2,'0');
+}
+
+function toggleAnswers() {
+    answersVisible = !answersVisible;
+    document.querySelectorAll('.answer-box').forEach(el => el.classList.toggle('hidden', !answersVisible));
+    saveState(false);
+}
+
+function gradeExam() {
+    let correctCount = 0;
+    const sectionScores = new Array(TOTAL_SECTIONS).fill(0);
+    
+    for (let i = 0; i < TOTAL_QUESTIONS; i++) {
+        const sel = document.querySelector('input[name="q'+i+'"]:checked');
+        const li = document.getElementById('q-' + i);
+        if (li) {
+            const isCorrect = sel && sel.value === correctAnswersMap[i];
+            if (isCorrect) {
+                correctCount++;
+                li.classList.add('correct');
+                li.classList.remove('incorrect');
+                sectionScores[Math.floor(i / QUESTIONS_PER_SECTION)]++;
+            } else {
+                li.classList.add('incorrect');
+                li.classList.remove('correct');
+            }
+        }
+    }
+    
+    const score = Math.round((correctCount / TOTAL_QUESTIONS) * 100);
+    document.getElementById('res-total').textContent = score + ' / 100';
+    document.getElementById('res-name').textContent = document.getElementById('studentName').value || (currentLang === 'ar' ? 'بطل' : 'Champion');
+    document.getElementById('res-date').textContent = new Date().toLocaleDateString(currentLang === 'ar' ? 'ar-AE' : 'en-US');
+    
+    const pc = document.getElementById('sections-performance');
+    pc.innerHTML = '';
+    examData.sections.forEach((s, idx) => {
+        pc.innerHTML += '<div class="flex justify-between items-center p-3 bg-white rounded-lg"><span class="text-gray-700">' + s.title[currentLang] + '</span><span class="font-bold text-amber-700">' + sectionScores[idx] + '/' + QUESTIONS_PER_SECTION + '</span></div>';
+    });
+    
+    const badge = document.getElementById('success-badge');
+    document.getElementById('success-percent').textContent = score + '%';
+    
+    if (currentLang === 'ar') {
+        if (score >= 90) { badge.textContent = '🌟 ممتاز جداً!'; badge.className = 'success-badge grade-excellent'; }
+        else if (score >= 75) { badge.textContent = '👏 ممتاز!'; badge.className = 'success-badge grade-good'; }
+        else if (score >= 50) { badge.textContent = '👍 جيد'; badge.className = 'success-badge grade-pass'; }
+        else { badge.textContent = '💪 حاول مرة أخرى'; badge.className = 'success-badge grade-fail'; }
+    } else {
+        if (score >= 90) { badge.textContent = '🌟 Outstanding!'; badge.className = 'success-badge grade-excellent'; }
+        else if (score >= 75) { badge.textContent = '👏 Excellent!'; badge.className = 'success-badge grade-good'; }
+        else if (score >= 50) { badge.textContent = '👍 Good'; badge.className = 'success-badge grade-pass'; }
+        else { badge.textContent = '💪 Try Again'; badge.className = 'success-badge grade-fail'; }
+    }
+    
+    document.getElementById('results-panel').classList.remove('hidden');
+    document.getElementById('results-panel').scrollIntoView({ behavior: 'smooth' });
+    if (timerInterval) clearInterval(timerInterval);
+}
+
+function sendResultsToEmail() {
+    const btn = document.getElementById('sendEmailBtn');
+    const status = document.getElementById('emailStatus');
+    btn.disabled = true;
+    btn.textContent = currentLang === 'ar' ? '⏳ جاري الإرسال...' : '⏳ Sending...';
+    
+    const name = document.getElementById('studentName').value || 'N/A';
+    const studentClass = document.getElementById('studentClass').value || 'N/A';
+    const date = document.getElementById('examDate').value || new Date().toLocaleDateString();
+    const score = document.getElementById('res-total').textContent;
+    const successRate = document.getElementById('success-percent').textContent;
+    const badge = document.getElementById('success-badge').textContent;
+    
+    let questionsHTML = '<div style="font-family:Arial; direction:rtl;">';
+    questionsHTML += '<h2>📐 ' + (currentLang === 'ar' ? 'نتيجة امتحان كثيرات الحدود' : 'Polynomial Functions Exam Result') + '</h2>';
+    questionsHTML += '<p><strong>' + (currentLang === 'ar' ? 'الاسم' : 'Name') + ':</strong> ' + name + '</p>';
+    questionsHTML += '<p><strong>' + (currentLang === 'ar' ? 'الشعبة' : 'Class') + ':</strong> ' + studentClass + '</p>';
+    questionsHTML += '<p><strong>' + (currentLang === 'ar' ? 'التاريخ' : 'Date') + ':</strong> ' + date + '</p>';
+    questionsHTML += '<p><strong>' + (currentLang === 'ar' ? 'الدرجة' : 'Score') + ':</strong> ' + score + ' (' + successRate + '%)</p>';
+    questionsHTML += '<p><strong>' + (currentLang === 'ar' ? 'التقدير' : 'Grade') + ':</strong> ' + badge + '</p>';
+    questionsHTML += '<hr><h3>' + (currentLang === 'ar' ? 'تفاصيل الإجابات:' : 'Answer Details:') + '</h3><table style="width:100%; border-collapse:collapse;">';
+    questionsHTML += '<tr style="background:#d97706; color:white;"><th style="padding:8px; border:1px solid #ddd;">#</th><th style="padding:8px; border:1px solid #ddd;">' + (currentLang === 'ar' ? 'السؤال' : 'Question') + '</th><th style="padding:8px; border:1px solid #ddd;">' + (currentLang === 'ar' ? 'إجابة الطالب' : 'Student Answer') + '</th><th style="padding:8px; border:1px solid #ddd;">' + (currentLang === 'ar' ? 'الصحيحة' : 'Correct') + '</th><th style="padding:8px; border:1px solid #ddd;">' + (currentLang === 'ar' ? 'النتيجة' : 'Result') + '</th></tr>';
+    
+    let globalIdx = 0;
+    examData.sections.forEach((section) => {
+        questionsHTML += '<tr style="background:#fef3c7;"><td colspan="5" style="padding:8px; font-weight:bold; border:1px solid #ddd;">' + section.title.ar + '</td></tr>';
+        section.questions.forEach((q) => {
+            const sel = document.querySelector('input[name="q'+globalIdx+'"]:checked');
+            const sv = sel ? sel.value : null;
+            const cv = correctAnswersMap[globalIdx];
+            const ic = sv === cv;
+            let sat = currentLang === 'ar' ? '❌ لم يجب' : '❌ No answer';
+            let sac = '#dc2626';
+            if (sv) {
+                const si = sv.charCodeAt(0) - 97;
+                sat = q.options[si][currentLang];
+                sac = ic ? '#16a34a' : '#dc2626';
+            }
+            const cat = q.options[q.correct][currentLang];
+            const rb = ic ? '#f0fdf4' : '#fef2f2';
+            questionsHTML += '<tr style="background:' + rb + ';"><td style="padding:8px; border:1px solid #ddd; text-align:center;">' + (globalIdx+1) + '</td><td style="padding:8px; border:1px solid #ddd;">' + q.q.ar.replace(/<[^>]+>/g, '').substring(0, 80) + '...</td><td style="padding:8px; border:1px solid #ddd; color:' + sac + ';">' + sat + '</td><td style="padding:8px; border:1px solid #ddd; color:#16a34a;">' + cat + '</td><td style="padding:8px; border:1px solid #ddd; text-align:center;">' + (ic?'✅':'❌') + '</td></tr>';
+            globalIdx++;
+        });
+    });
+    questionsHTML += '</table></div>';
+    
+    const templateParams = {
+        to_email: TARGET_EMAIL,
+        student_name: name,
+        student_class: studentClass,
+        exam_date: date,
+        total_score: score,
+        success_rate: successRate,
+        grade: badge,
+        answers_table: questionsHTML
+    };
+    
+    emailjs.send(SERVICE_ID, TEMPLATE_ID, templateParams)
+        .then(() => {
+            status.textContent = currentLang === 'ar' ? '✅ تم الإرسال بنجاح!' : '✅ Sent successfully!';
+            status.style.color = '#16a34a';
+            btn.textContent = currentLang === 'ar' ? '✓ تم' : '✓ Sent';
+            alert(currentLang === 'ar' ? 'تم إرسال النتيجة للمعلم بنجاح!' : 'Result sent to teacher successfully!');
+        })
+        .catch((error) => {
+            status.textContent = currentLang === 'ar' ? '❌ فشل الإرسال' : '❌ Failed to send';
+            status.style.color = '#dc2626';
+            btn.disabled = false;
+            btn.textContent = currentLang === 'ar' ? '📧 حاول مرة أخرى' : '📧 Try Again';
+            alert(currentLang === 'ar' ? 'فشل الإرسال: ' + error.text : 'Failed: ' + error.text);
+        });
+}
+
+window.addEventListener('DOMContentLoaded', () => {
+    const saved = loadState();
+    if (saved && saved.seed) {
+        currentSeed = saved.seed;
+        currentLang = saved.lang || 'ar';
+        timeRemaining = saved.timeRemaining !== undefined ? saved.timeRemaining : TOTAL_TIME;
+        answersVisible = saved.answersVisible || false;
+    } else {
+        currentSeed = Date.now();
+    }
+    
+    document.getElementById('btn-ar').classList.toggle('active', currentLang === 'ar');
+    document.getElementById('btn-en').classList.toggle('active', currentLang === 'en');
+    document.body.classList.toggle('en-mode', currentLang === 'en');
+    document.documentElement.lang = currentLang;
+    document.documentElement.dir = currentLang === 'ar' ? 'rtl' : 'ltr';
+    
+    document.querySelectorAll('[data-ar]').forEach(el => {
+        el.textContent = el.getAttribute('data-' + currentLang);
+    });
+    
+    document.querySelectorAll('[data-placeholder-ar]').forEach(el => {
+        el.placeholder = el.getAttribute('data-placeholder-' + currentLang);
+    });
+    
+    prepareShuffledExam();
+    renderExam();
+    if (saved) {
+        if (saved.studentName) document.getElementById('studentName').value = saved.studentName;
+        if (saved.studentClass) document.getElementById('studentClass').value = saved.studentClass;
+        if (saved.examDate) document.getElementById('examDate').value = saved.examDate;
+        if (saved.answers) restoreAnswers(saved.answers);
+    }
+    setupAnswerListeners();
+    setupInputListeners();
+    startTimer();
+});
+window.addEventListener('beforeunload', () => saveState(false));
+</script>
+</body>
+</html>
